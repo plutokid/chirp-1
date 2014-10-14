@@ -28,6 +28,12 @@
 ;(clsql:locally-enable-sql-reader-syntax)
 (file-enable-sql-reader-syntax)
 
+(defun user-url (user)
+  (format nil "/user/~d"
+	  (typecase user
+	    (user (id user))
+	    (number user))))
+
 (defun find-user-by-username (username)
   (first (select 'user
 		 :where [= [slot-value 'user 'username] username]

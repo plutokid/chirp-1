@@ -16,6 +16,7 @@
 
 	(:ul
 	 (when chirps
+	   (format t "~a" chirps)
 	   (loop for chirp in chirps
 		 do (htm
 		     (:li (str (render chirp :html))))))))))))

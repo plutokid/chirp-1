@@ -9,10 +9,21 @@
 	     :db-constraints :not-null
 	     :reader chirp-id
 	     :initarg :chirp-id)
+   (chirp :type chirp
+	  :db-kind :join
+	  :db-info (:join-class chirp
+		    :foreign-key chirp-id
+		    :home-key id
+		    :set t))
    (tag-id :type integer
 	   :db-constraints :not-null
 	   :reader tag-id
-	   :initarg :tag-id))
+	   :initarg :tag-id)
+   (tag :type tag
+	:db-kind :join
+	:db-info (:join-class tag
+		  :home-key id
+		  :foreign-key tag-id)))
   (:base-table taggings))
 
 (defun make-tagging (chirp-id tag)

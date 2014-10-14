@@ -22,11 +22,20 @@
 (setf (ningle:route *app* "/user/:user" :method :get)
       'show-user)
 
-(defvar *acceptor* (clackup
-		    (clack.builder:builder
-		     clack.middleware.session:<clack-middleware-session>
-		     clack.middleware.csrf:<clack-middleware-csrf>
-		     (clack.middleware.clsql:<clack-middleware-clsql>
-		      :connection-spec '("test.sqlite3")
-		      :database-type :sqlite3)
-		     *app*)))
+(setf (ningle:route *app* "/tags/:tag" :method :get) 'show-tag)
+
+(defvar *acceptor*)
+
+(defun start ()
+  (setf *acceptor*
+	(clackup
+	 (clack.builder:builder
+	  clack.middleware.session:<clack-middleware-session>
+	  clack.middleware.csrf:<clack-middleware-csrf>
+	  (clack.middleware.clsql:<clack-middleware-clsql>
+	   :connection-spec '("test.sqlite3")
+	   :database-type :sqlite3)
+	  *app*))))
+
+(defun stop ()
+  (clack:stop))

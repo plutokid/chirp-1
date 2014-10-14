@@ -17,7 +17,24 @@
 	   :db-kind :join
 	   :db-info (:join-class user
 		     :home-key user-id
-		     :foreign-key id))
+		     :foreign-key id
+		     :set nil))
+   ;; FIXME: Through associations?
+   (mentions :type list
+	     :db-kind :join
+	     :db-info (:join-class mention
+		       :home-key id
+		       :foreign-key chirp-id
+		       :target-slot mention
+		       :set t))
+   (tags :type list
+	 :reader tags
+	 :db-kind :join
+	 :db-info (:join-class tagging
+		   :home-key id
+		   :foreign-key chirp-id
+		   :target-slot tag
+		   :set t))
    (content :type string
 	    :accessor content
 	    :db-constraints :not-null
@@ -47,20 +64,62 @@
     (when user
       (chirps user))))
 
+(defun chirp-url (chirp)
+  (format nil "/chirp/~d" (typecase chirp
+			    (chirp (id chirp))
+			    (number chirp))))
+
 (defmethod render ((chirp chirp) (format (eql :html)))
-  (who:with-html-output-to-string (str)
-    (:div :class "chirp"
-	  (str (format nil "~{~a~^ ~}"
-		       (loop for word in (split-sequence #\Space (content chirp))
-			     for trimmed-word = (trim-characters word)
-			     do (cond
-				  ((word-is-tag-p word)
-				   (htm (:a :href (format nil "/tags/~a" (subseq trimmed-word 1))
-					    (str word))))
+  ;; (who:with-html-output-to-string (str)
+  ;;   (:div :class "chirp"
+  ;; 	  (str (format nil "~{~a~^ ~}"
+  ;; 		       (loop for word in (split-sequence #\Space (content chirp))
+  ;; 			     for trimmed-word = (trim-characters word)
+  ;; 			     do (cond
+  ;; 				  ((word-is-tag-p word)
+  ;; 				   (htm (:a :href (format nil "/tags/~a" (subseq trimmed-word 1))
+  ;; 					    (str word))))
 
-				  ((word-is-mention-p word)
-				   (htm (:a :href (format nil "/users/~a" (subseq trimmed-word 1))
-					    (str word))))
+  ;; 				  ((word-is-mention-p word)
+  ;; 				   (htm (:a :href (format nil "/users/~a" (subseq trimmed-word 1))
+  ;; 					    (str word))))
 
-				  (t (str word)))))))))
+  ;; 				  (t (str word))))))))
 
+  (format-chirp-content (content chirp))
+  )
+(defun make-link (word)
+  
+  (let ((trimmed-word (trim-characters word)))
+    (who:with-html-output-to-string (str)
+      (cond
+	((word-is-tag-p word)
+	 (htm (:a :href (format nil "/tags/~a" (subseq trimmed-word 1))
+		  (str word))))
+	
+	((word-is-mention-p word)
+	 (htm (:a :href (format nil "/users/~a" (subseq trimmed-word 1))
+		  (str word))))))))
+
+(defun format-chirp-content (body)
+  (with-output-to-string (out)
+    (with-input-from-string (in body)
+      (let ((word nil)
+	    (reading nil))
+	(loop for c = (read-char in nil :eof)
+	      until (eq c :eof)
+	      do (cond
+		   ((member c +char-bag+)
+		    
+		    (write-string (make-link (coerce (nreverse word) 'string)) out)
+		    (setf reading nil
+			  word nil))
+		   
+		   ((member c '(#\# #\@))
+		    (setf reading t)
+		    (push c word))
+
+		   (reading
+		    (push c word))
+
+		   (t (write-char c out))))))))

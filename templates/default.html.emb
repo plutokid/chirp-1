@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      <% @var title %>
+    </title>
+    <link rel="stylesheet" type="text/css" href="/static/application.css">
+  </head>
+
+  <body>
+    <header>
+      <nav>
+	<ul class="logo">
+	  <li><a href="/">Chirp!</a>
+	</ul>
+
+	<ul class="nav">
+	  <li><a href="#">You</a>
+	  <li><a href="/settings/">Settings</a>
+	  <li><a href="/logout">Log Out</a>
+	</ul>
+      </nav>
+    </header>
+
+
+    <main>
+      <% @var _content -escape raw %>
+    </main>
+
+    <footer>
+      <div>&copy; Matt Novenstern 2014</div>
+
+      <ul class="footer">
+	<li><a href="/privacy">Privacy</a>
+	<li><a href="/contact">Contact us</a>
+      </ul>
+    </footer>
+  </body>
+</html>

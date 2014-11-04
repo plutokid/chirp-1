@@ -1,0 +1,15 @@
+<% (let ((chirp (getf env :chirp))) %>
+<div class="chirp">
+  <div class="chirp-header">
+    <img src="/static/gusty.jpg" class="chirp-img">
+    <a class="chirp-username" href="<%= (chirp::user-url (author chirp))%>">
+      <%= (chirp::username (chirp::author chirp)) %>
+    </a>
+    <span class="chirp-timeago">3 hours ago</span>
+  </div>
+
+  <div class="chirp-body">
+    <%= @var content -escape raw %>
+  </div>
+</div>
+<% ) %>

@@ -38,14 +38,3 @@
 
 (defun word-is-tag-p (word)
   (starts-with +tag-char+ word))
-
-(defun show-tag (params)
-  (let ((tag (find-tag-by-text (getf params :tag))))
-    (render tag :html)))
-
-(defmethod render ((tag tag) (format (eql :html)))
-  (who:with-html-output-to-string (str)
-    (:h1 (str (text tag)))
-
-    (:ul (loop for chirp in (chirps tag)
-	       do (htm (:li (str (render (car chirp) :html))))))))

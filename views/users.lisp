@@ -10,8 +10,7 @@
 	 (user (apply #'make-instance 'user user-params)))
     (setf (password user) (getf user-params :password))
     (update-records-from-instance user)
-    (html-response
-      (redirect-to (user-url user)))))
+    (redirect-to (user-url user))))
 
 (defun show-user (env)
   (let* ((params (getf env :route.parameters))

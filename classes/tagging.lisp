@@ -14,7 +14,7 @@
 	  :db-info (:join-class chirp
 		    :foreign-key chirp-id
 		    :home-key id
-		    :set t))
+		    :set nil))
    (tag-id :type integer
 	   :db-constraints :not-null
 	   :reader tag-id
@@ -23,7 +23,8 @@
 	:db-kind :join
 	:db-info (:join-class tag
 		  :home-key id
-		  :foreign-key tag-id)))
+		  :foreign-key tag-id
+		  :set nil)))
   (:base-table taggings))
 
 (defun make-tagging (chirp-id tag)

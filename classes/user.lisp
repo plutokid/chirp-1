@@ -31,6 +31,10 @@
 ;(clsql:locally-enable-sql-reader-syntax)
 (file-enable-sql-reader-syntax)
 
+(defmethod print-object ((user user) stream)
+  (print-unreadable-object (user stream :type t)
+    (format stream "id: ~d username: ~a" (id user) (username user))))
+
 (defmethod initialize-instance :after ((user user) &rest initargs &key password &allow-other-keys)
   (declare (ignore initargs))
   (unless (slot-boundp user 'id)

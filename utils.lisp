@@ -41,5 +41,7 @@
 	       (getf (envy:config :chirp.config) :random-salt)))
 	(password-bytes (ironclad:ascii-string-to-byte-array string)))
 
-    (ironclad:byte-array-to-hex-string
-     (ironclad:pbkdf2-hash-password password-bytes :salt salt))))
+    (ironclad:pbkdf2-hash-password-to-combined-string password-bytes :salt salt)))
+
+(defun random-hex-string ()
+  (ironclad:byte-array-to-hex-string (ironclad:make-random-salt)))

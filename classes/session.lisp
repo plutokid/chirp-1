@@ -7,7 +7,8 @@
        :reader id)
    (key :type string
 	:db-constraints (:not-null)
-	:reader key)
+	:reader key
+	:initarg :key)
    (user-id :type integer
 	    :db-constraints (:not-null)
 	    :reader user-id)
@@ -25,3 +26,5 @@
 
 (defun find-session (id)
   (car (select 'session :where [= [slot-value 'session 'id] id] :flatp t)))
+
+(defun create-session-for-user ())

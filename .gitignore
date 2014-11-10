@@ -3,3 +3,6 @@
 
 .crypto.sexp
 /test.sqlite3
+
+# Emacs files
+.#*

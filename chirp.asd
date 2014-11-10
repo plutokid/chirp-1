@@ -13,6 +13,8 @@
                #:cl-emb
 	       #:envy
 	       #:cl-who
+	       #:parenscript
+	       #:clack.handler.hunchensocket
                #:clack-middleware-clsql)
   :components ((:file "package")
 	       (:file "config")
@@ -31,5 +33,8 @@
 				     (:file "users")
 				     (:file "sessions")
 				     (:file "tags")))
+	       (:module "parenscript"
+			:components ((:file "package")
+				     (:file "birder")))
 	       (:file "db")
 	       (:file "chirp")))

@@ -35,5 +35,10 @@
 	<li><a href="/contact">Contact us</a>
       </ul>
     </footer>
+    <script src="/static/angular.js"></script>
+    <script src="/static/angular-sanitize.js"></script>
+    <script src="/static/angular-websocket.js"></script>
+    <script src="/ps/birder.js"></script>
+    <script src="/ps/timeago.js"></script>
   </body>
 </html>

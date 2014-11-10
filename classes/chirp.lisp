@@ -52,21 +52,32 @@
 (defun all-chirps ()
   (select 'chirp))
 
-(defmethod extract-mentions ((chirp chirp))
-  (let ((words (split-sequence #\Space (content chirp))))
+(defun extract-references (chirp)
+  (let ((body (content chirp)))
+    (with-input-from-string (in body)
+      (let ((word nil)
+	    (reading nil))
+	(loop for c = (read-char in nil :eof)
+	   until (eq c :eof)
+	   do (cond
+		((and (member c +char-bag+) word)
 
-    (dolist (word words)
-      (print word)
-      ;; Strip off any trailing punctuation
-      (let ((word (trim-characters word)))
+		 (let ((reference (coerce (nreverse word) 'string)))
+		   (funcall (ecase (char reference 0)
+			      (#\# #'make-tagging)
+			      (#\@ #'make-mention))
+			    (id chirp)
+			    (subseq reference 1)))
 
-	;; Check if we match any of the special words
-	(cond
-	  ((word-is-tag-p word)
-	   (make-tagging (id chirp) (subseq word 1)))
+		 (setf reading nil
+		       word nil))
 
-	  ((word-is-mention-p word)
-	   (make-mention (id chirp) (subseq word 1))))))))
+		((member c '(#\# #\@))
+		 (setf reading t)
+		 (push c word))
+
+		(reading
+		 (push c word))))))))
 
 (defun find-chirps-by-username (username)
   (let ((user (find-user-by-username username)))
@@ -82,26 +93,9 @@
 			     (number chirp))))
 
 (defmethod render ((chirp chirp) (format (eql :html)))
-  ;; (who:with-html-output-to-string (str)
-  ;;   (:div :class "chirp"
-  ;; 	  (str (format nil "~{~a~^ ~}"
-  ;; 		       (loop for word in (split-sequence #\Space (content chirp))
-  ;; 			     for trimmed-word = (trim-characters word)
-  ;; 			     do (cond
-  ;; 				  ((word-is-tag-p word)
-  ;; 				   (htm (:a :href (format nil "/tags/~a" (subseq trimmed-word 1))
-  ;; 					    (str word))))
-
-  ;; 				  ((word-is-mention-p word)
-  ;; 				   (htm (:a :href (format nil "/users/~a" (subseq trimmed-word 1))
-  ;; 					    (str word))))
-
-  ;; 				  (t (str word))))))))
-
   (format-chirp-content (content chirp)))
 
 (defun make-link (word)
-  (print word)
   (let ((trimmed-word (trim-characters word)))
     (who:with-html-output-to-string (str)
       (cond

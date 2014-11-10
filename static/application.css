@@ -1,0 +1,150 @@
+body, nav, main, section, h1, h2, h3, h4, h5, h6, h7, p, ul, li {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    font-family: inherit;
+    list-style: none;
+    color: inherit;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Default layout style */
+
+body {
+    background: white;
+    font-family: sans-serif;
+}
+
+header {
+    border-bottom: 2px solid darkgrey;
+    background: linear-gradient(lightblue, white);
+    box-shadow: 3px 3px 3px 0 lightgrey;
+    color: white;
+}
+
+main {
+    background: #eee;
+    margin: 0 auto;
+    width: 80%;
+    min-width: 500px;
+    border-left: 2px solid silver;
+    border-right: 2px solid silver;
+    padding: 20px;
+    box-shadow: 10px 0px 10px 0 lightgrey;
+}
+
+footer {
+    background: lightgrey;
+    border: 2px solid darkgrey;
+    padding: 20px;
+    margin: 0 auto;
+    width: 80%;
+    min-width: 500px;
+    box-shadow: 10px 10px 10px 0 lightgrey;
+}
+
+footer:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+.title {
+    font-size: 36px;
+}
+
+ul.logo, ul.nav, ul.footer {
+    list-style: none;
+}
+
+ul.logo {
+    float: left;
+    color: blue;
+}
+
+ul.nav, ul.footer {
+    float: right;
+}
+
+ul.logo > li, ul.nav > li, ul.footer > li {
+    float: left;
+    padding: 10px;
+}
+
+nav {
+    display: block;
+}
+
+nav:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+footer > div {
+    float: left;
+    padding: 10px;
+    color: darkgrey;
+}
+
+/* Chirp styles */
+
+.chirp {
+    background-color: white;
+    width: 500px;
+    margin: 30px auto;
+    box-shadow: 10px 10px 10px 0 grey;
+    border-radius: 3px;
+}
+
+.chirp-header {
+    padding: 20px;
+}
+
+.chirp-header:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+.chirp-img {
+    float: left;
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+    border: 2px solid grey;
+}
+
+.chirp-username {
+    color: blue;
+    display: block;
+}
+
+.chirp-username:hover {
+    text-decoration: underline;
+}
+
+.chirp-timeago {
+    color: grey;
+}
+
+.chirp-body {
+    background: white;
+    padding: 20px;
+    border-top: 2px solid lightgrey;
+}
+
+/* New chirp */
+
+button {
+    border-radius: 3px;
+    border: 2px solid black;
+    background: linear-gradient(lightgrey, white);
+}
+
+textarea {
+    border: 1px solid darkgrey;
+}

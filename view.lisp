@@ -10,6 +10,11 @@
      (:content-type "text/html")
      ,,@body))
 
+(defmacro js-response (&body body)
+  ``(200
+     (:content-type "text/javascript")
+     ,(ps:ps ,@body)))
+
 (defmacro redirect-to (url &body body)
   ``(302
     (:location ,,url)
@@ -48,5 +53,4 @@
 (defun emb-helper (symbol)
   "Imports a symbol into the cl-emb-intern package, where it will be available for use at template time."
   (let ((symbols (if (listp symbol) symbol (list symbol))))
-    (print symbols)
     (shadowing-import symbols cl-emb:*function-package*)))

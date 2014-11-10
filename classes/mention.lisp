@@ -3,11 +3,8 @@
 (defparameter +mention-char+ #\@
   "The character that indicates someone mentions another user")
 
-(clsql:def-view-class mention ()
-  ((id :type integer
-       :db-type :key
-       :reader id)
-   (chirp-id :type integer
+(clsql:def-view-class mention (base)
+  ((chirp-id :type integer
 	     :db-constraints :not-null
 	     :reader chirp-id
 	     :initarg :chirp-id)
@@ -22,7 +19,7 @@
 	    :reader user-id
 	    :initarg :user-id)
    (user :type user
-	 :db-class :db-join
+	 :db-kind :join
 	 :db-info (:join-class user
 		   :home-key user-id
 		   :foreign-key id

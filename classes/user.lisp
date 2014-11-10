@@ -1,11 +1,7 @@
 (in-package #:chirp)
 
-(def-view-class user ()
-  ((id :type integer
-       :db-kind :key
-       :db-constraints (:not-null)
-       :reader id)
-   (username :type string
+(def-view-class user (base)
+  ((username :type string
 	     :db-constraints (:not-null :unique)
 	     :accessor username
 	     :initarg :username)
@@ -35,10 +31,10 @@
   (print-unreadable-object (user stream :type t)
     (format stream "id: ~d username: ~a" (id user) (username user))))
 
-(defmethod initialize-instance :after ((user user) &rest initargs &key password &allow-other-keys)
-  (declare (ignore initargs))
-  (unless (slot-boundp user 'id)
-    (setf (password user) password)))
+;; (defmethod initialize-instance :after ((user user) &rest initargs &key password &allow-other-keys)
+;;   (declare (ignore initargs))
+;;   (unless (slot-boundp user 'id)
+;;     (setf (password user) password)))
 
 (defmethod (setf password) (password (user user))
   (setf (password-digest user) (hash-password password)))

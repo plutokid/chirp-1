@@ -1,11 +1,7 @@
 (in-package #:chirp)
 
-(clsql:def-view-class tagging ()
-  ((id :type integer
-       :db-kind :key
-       :db-constraints (:not-null)
-       :reader id)
-   (chirp-id :type integer
+(clsql:def-view-class tagging (base)
+  ((chirp-id :type integer
 	     :db-constraints :not-null
 	     :reader chirp-id
 	     :initarg :chirp-id)

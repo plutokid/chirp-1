@@ -4,12 +4,8 @@
   '((#\# make-tagging)
     (#\@ make-mention)))
 
-(clsql:def-view-class chirp ()
-  ((id :type integer
-       :db-kind :key
-       :db-constraints (:not-null)
-       :reader id)
-   (user-id :type integer
+(clsql:def-view-class chirp (base)
+  ((user-id :type integer
 	    :db-constraints :not-null
 	    :reader user-id
 	    :initarg :user-id)
@@ -19,6 +15,7 @@
 	   :db-info (:join-class user
 		     :home-key user-id
 		     :foreign-key id
+		     :retrieval :immediate
 		     :set nil))
    ;; FIXME: Through associations?
    (mentions :type list

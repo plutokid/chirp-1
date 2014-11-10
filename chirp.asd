@@ -18,7 +18,8 @@
 	       (:file "config")
 	       (:file "utils")
 	       (:module "classes"
-			:components ((:file "user")
+			:components ((:file "base")
+				     (:file "user")
 				     (:file "session")
 				     (:file "tag")
 				     (:file "tagging")

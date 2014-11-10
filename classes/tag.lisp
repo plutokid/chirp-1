@@ -3,12 +3,8 @@
 (defparameter +tag-char+ #\#
   "The character that indicates a tag")
 
-(clsql:def-view-class tag ()
-  ((id :type integer
-       :db-kind :key
-       :db-constraints (:not-null)
-       :reader id)
-   (text :type string
+(clsql:def-view-class tag (base)
+  ((text :type string
 	 :db-constraints :not-null
 	 :reader text
 	 :initarg :text)

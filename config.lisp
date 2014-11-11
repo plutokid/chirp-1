@@ -12,16 +12,15 @@
 (defconfig :common
     (let ((base-pathname (asdf:component-pathname (asdf:find-system :chirp))))
       `(:application-root ,base-pathname
-			  :database-type :postgresql
-			  )))
+			  :database-type :postgresql)))
 
 (defconfig |development|
     `(:debug t
 	     :connection-spec ,(db-spec :dev)
 	     ,@(read-from-string
-			     (alexandria:read-file-into-string
-			      (merge-pathnames ".crypto.sexp"
-					       base-pathname)))))
+		(alexandria:read-file-into-string
+		 (merge-pathnames ".crypto.sexp"
+				  (envy:config :chirp.config :application-root))))))
 
 (defconfig |test|
     `(:debug t
@@ -29,7 +28,7 @@
 	     ,@(read-from-string
 			     (alexandria:read-file-into-string
 			      (merge-pathnames ".crypto.sexp"
-					       base-pathname)))))
+					       (envy:config :chirp.config :application-root))))))
 
 (defconfig |production|
     `(:debug nil

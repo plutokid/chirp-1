@@ -1,0 +1,12 @@
+* Crypto
+
+** Secure salt
+#+begin_src lisp
+(ironclad:byte-array-to-hex-string (ironclad:make-random-salt))
+#+end_src
+
+** Passwords
+
+* To Do list
+
+** TODO Auth

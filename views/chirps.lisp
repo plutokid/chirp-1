@@ -18,19 +18,3 @@
     (update-records-from-instance chirp)
     (extract-references chirp)
     (redirect-to (chirp-url chirp))))
-
-
-(defun ng-chirp (env)
-  (html-response
-   (with-layout ()
-     (with-html-output-to-string (s)
-       (:div :ng-app "Chirp"
-	     (:div :ng-controller "ChirpController"
-		   (:div :class "chirp" :ng-repeat "chirp in chirps"
-			 (:div :class "chirp-header"
-			       (:img :src "/static/gusty.jpg" :class "chirp-img")
-			       (:a :class "chirp-username"
-				   :href "{{ chirp.user-url }}"
-				   "{{ chirp.username }}")
-			       (:span :class "chirp-timeago" "{{ timeago(chirp.created_at) }}"))
-			 (:div :class "chirp-body" :ng-bind-html "chirp.content"))))))))

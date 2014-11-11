@@ -35,6 +35,7 @@
 				     (:file "tags")))
 	       (:module "parenscript"
 			:components ((:file "package")
-				     (:file "birder")))
+				     (:file "birder")
+				     (:file "timeago")))
 	       (:file "db")
 	       (:file "chirp")))

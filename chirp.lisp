@@ -2,13 +2,11 @@
 
 (defun index (env)
   (html-response
-    (with-layout ()
+    (with-layout (:title "Chirp!")
       (who:with-html-output-to-string (str)
-	(:div :ng-app "Chirp"
-	      (:h1 :class "title""Welcome to the club")
-	      (:p "As the world's leading site dedicated to pretending to be birds, we welcome you under our wing!")
-	      (:div :ng-controller "ChirpController"
-		    (:p "{{ message }}")))))))
+	(:div
+	 (:h1 :class "title""Welcome to the club")
+	 (:p "As the world's leading site dedicated to pretending to be birds, we welcome you under our wing!"))))))
 
 (defroutes *app*
   (GET  "/"             #'index)
@@ -20,7 +18,6 @@
   (POST "/users"        #'create-user)
   (GET  "/users/new"    #'new-user)
   (GET  "/users/:user"  #'show-user)
-  (GET  "/ng-chirps"    #'ng-chirp)
 
   (GET  "/chirps/new"   #'new-chirp)
   (GET  "/chirps/:id"   #'show-chirp)
@@ -47,8 +44,8 @@
 	  (clack.middleware.csrf:<clack-middleware-csrf>
 	   :one-time-p t)
 	  (clack.middleware.clsql:<clack-middleware-clsql>
-	   :connection-spec '("test.sqlite3")
-	   :database-type :sqlite3)
+	   :connection-spec (envy:config :chirp.config :connection-spec)
+	   :database-type (envy:config :chirp.config :database-type))
 	  #'app-wrap)
 	 :server :hunchensocket)))
 

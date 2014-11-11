@@ -13,18 +13,28 @@
     (let ((base-pathname (asdf:component-pathname (asdf:find-system :chirp))))
       `(:application-root ,base-pathname
 			  :database-type :postgresql
-			  ,@(read-from-string
-			     (alexandria:read-file-into-string
-			      (merge-pathnames ".crypto.sexp"
-					       base-pathname))))))
+			  )))
 
 (defconfig |development|
     `(:debug t
-	     :connection-spec ,(db-spec :dev)))
+	     :connection-spec ,(db-spec :dev)
+	     ,@(read-from-string
+			     (alexandria:read-file-into-string
+			      (merge-pathnames ".crypto.sexp"
+					       base-pathname)))))
 
 (defconfig |test|
     `(:debug t
-	     :connection-spec ,(db-spec :test)))
+	     :connection-spec ,(db-spec :test)
+	     ,@(read-from-string
+			     (alexandria:read-file-into-string
+			      (merge-pathnames ".crypto.sexp"
+					       base-pathname)))))
+
+(defconfig |production|
+    `(:debug nil
+	     :connection-spec ,(db-spec :production)
+	     :random-salt (asdf::getenv "RANDOM_SALT")))
 
 ;; (defconfig :default
 ;;     `(,@|development|))

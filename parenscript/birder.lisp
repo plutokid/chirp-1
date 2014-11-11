@@ -27,7 +27,7 @@
 			 (chain -web-socket
 				(onopen (lambda ()
 					  (chain console (log "connected"))
-					  (chain -web-socket (send "message" "another part")))))
+					  )))
 
 			 (chain -web-socket
 				(onmessage (lambda (event)

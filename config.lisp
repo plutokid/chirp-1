@@ -9,26 +9,29 @@
 (defun db-spec (env)
   (list "localhost" (format nil "chirp_~a" (string-downcase env)) "" ""))
 
+
 (defconfig :common
     (let ((base-pathname (asdf:component-pathname (asdf:find-system :chirp))))
       `(:application-root ,base-pathname
 			  :database-type :postgresql)))
 
+(defun read-secrets ()
+  (handler-case
+      (read-from-string
+       (alexandria:read-file-into-string
+	(merge-pathnames ".crypto.sexp"
+			 (envy:config :chirp.config :application-root))))
+    (error () (list :random-salt (asdf::getenv "RANDOM_SALT")))))
+
 (defconfig |development|
     `(:debug t
 	     :connection-spec ,(db-spec :dev)
-	     ,@(read-from-string
-		(alexandria:read-file-into-string
-		 (merge-pathnames ".crypto.sexp"
-				  (envy:config :chirp.config :application-root))))))
+	     ,@(read-secrets)))
 
 (defconfig |test|
     `(:debug t
 	     :connection-spec ,(db-spec :test)
-	     ,@(read-from-string
-			     (alexandria:read-file-into-string
-			      (merge-pathnames ".crypto.sexp"
-					       (envy:config :chirp.config :application-root))))))
+	     ,@(read-secrets)))
 
 (defconfig |production|
     `(:debug nil

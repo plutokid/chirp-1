@@ -13,5 +13,3 @@
 (load (make-pathname :directory *build-dir* :defaults "local.lisp"))
 
 (initialize-application)
-
-(chirp:start)

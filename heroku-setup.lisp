@@ -4,7 +4,8 @@
 
 (load (make-pathname :directory *build-dir* :defaults "chirp.asd"))
 
-(asdf:oos 'asdf:load-op :chirp)
+(pushnew (make-pathname :directory *build-dir*) ql:*local-project-directories*)
+(require 'chirp)
 ;;; Copy wuwei public files to build
 
 ;(wu:heroku-install-wupub-files)

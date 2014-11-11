@@ -4,7 +4,7 @@
 
 (load (make-pathname :directory *build-dir* :defaults "chirp.asd"))
 
-(ql:quickload :chirp)
+(require 'chirp)
 ;;; Copy wuwei public files to build
 
 ;(wu:heroku-install-wupub-files)

@@ -18,7 +18,7 @@
 	   "postgres://([a-z]+):([a-zA-Z0-9]+)@([a-zA-Z0-9\-\.]+):([a-zA-Z0-9\/]+)"
 	   (asdf::getenv "DATABASE_URL"))
 	(coerce values 'list))
-    (print (list db user password host))))
+    (print (list host db user password))))
 
 (defun read-secrets ()
   (let ((base-pathname (asdf:component-pathname (asdf:find-system :chirp))))

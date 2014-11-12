@@ -34,6 +34,8 @@
 (defvar *acceptor*)
 
 (defun start (&key (port 5000))
+  (ensure-environment)
+  (create-tables)
   (setf *acceptor*
 	(clackup
 	 (clack.builder:builder

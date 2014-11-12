@@ -6,8 +6,8 @@
 
 (setf (config-env-var) "APP_ENV")
 
-(defun db-spec (env)
-  (list "localhost" (format nil "chirp_~a" (string-downcase env)) "" ""))
+(defun db-spec (env &optional (host "localhost"))
+  (list host (format nil "chirp_~a" (string-downcase env)) "" ""))
 
 
 (defconfig :common
@@ -35,8 +35,8 @@
 
 (defconfig |production|
     `(:debug nil
-	     :connection-spec ,(list (asdf::getenv "DATABASE_URL") "chirp_production" "" "")
-	     :random-salt (asdf::getenv "RANDOM_SALT")))
+	     :connection-spec ,(db-spec :production (asdf::getenv "DATABASE_URL"))
+	     :random-salt ,(asdf::getenv "RANDOM_SALT")))
 
 ;; (defconfig :default
 ;;     `(,@|development|))

@@ -37,4 +37,5 @@
 			:components ((:file "package")
 				     (:file "birder")
 				     (:file "timeago")))
+	       (:file "helpers")
 	       (:file "chirp")))

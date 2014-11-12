@@ -35,7 +35,7 @@
 
 (defconfig |production|
     `(:debug nil
-	     :connection-spec ,(db-spec :production)
+	     :connection-spec ,(list (asdf::getenv "DATABASE_URL") "chirp_production" "" "")
 	     :random-salt (asdf::getenv "RANDOM_SALT")))
 
 ;; (defconfig :default

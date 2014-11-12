@@ -11,15 +11,14 @@
   (list host (format nil "chirp_~a" (string-downcase env)) "" ""))
 
 (defun production-db-spec ()
-  "Heroku database url format is postgres://username:password@host:port/database_name.
-TODO: cleanup code."
-  (let* ((url (second (cl-ppcre:split "//" (asdf::getenv "DATABASE_URL"))))
-	 (user (first (cl-ppcre:split ":" (first (cl-ppcre:split "@" url)))))
-	 (password (second (cl-ppcre:split ":" (first (cl-ppcre:split "@" url)))))
-	 (host (first (cl-ppcre:split ":" (first (cl-ppcre:split "/" (second (cl-ppcre:split "@" url)))))))
-	 (database (second (cl-ppcre:split "/" (second (cl-ppcre:split "@" url))))))
-    (list database user password host)))
-
+  "Best kind of ugly as sin"
+  (destructuring-bind (user password host db)
+      (multiple-value-bind (string values)
+	  (ppcre:scan-to-strings
+	   "postgres://([a-z]+):([a-zA-Z0-9]+)@([a-zA-Z0-9\-\.]+):([a-zA-Z0-9\/]+)"
+	   (asdf::getenv "DATABASE_URL"))
+	(coerce values 'list))
+    (print (list db user password host))))
 
 (defun read-secrets ()
   (let ((base-pathname (asdf:component-pathname (asdf:find-system :chirp))))

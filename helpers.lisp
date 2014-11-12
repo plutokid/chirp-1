@@ -3,10 +3,12 @@
 (defparameter +view-classes+ '(user chirp tag tagging mention session))
 
 (defun create-tables ()
-  (unless (clsql-sys:probe-database (envy:config :chirp.config :connection-spec))
-    (clsql-sys:create-database
-     (envy:config :chirp.config :connection-spec)
-     :database-type (envy:config :chirp.config :database-type)))
+  ;; Only try to create the database if we're in debug (local computer) mode
+  (if (envy:config :chirp.config :debug)
+      (unless (clsql-sys:probe-database (envy:config :chirp.config :connection-spec))
+	(clsql-sys:create-database
+	 (envy:config :chirp.config :connection-spec)
+	 :database-type (envy:config :chirp.config :database-type))))
 
   (clsql:with-database
       (db (envy:config :chirp.config :connection-spec)

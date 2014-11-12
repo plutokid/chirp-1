@@ -9,7 +9,7 @@
 	       #:clack-app-route ;#:ningle
 	       #:clack-middleware-csrf
                #:clsql
-;	       #:clsql-postgresql
+	       #:clsql-postgresql
                #:cl-emb
 	       #:envy
 	       #:cl-who

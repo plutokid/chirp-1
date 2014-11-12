@@ -9,7 +9,8 @@
 
 (defun heroku-toplevel ()
   (let ((port (parse-integer (getenv "PORT"))))
-    (chirp:start :port port)))
+    (chirp:start :port port)
+    (loop do (sleep 60))))
 
 ;(wu:heroku-install-wupub-files)
 

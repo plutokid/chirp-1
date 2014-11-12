@@ -8,7 +8,8 @@
 ;;; Copy wuwei public files to build
 
 (defun heroku-toplevel ()
-  (chirp:start))
+  (let ((port (parse-integer (getenv "PORT"))))
+    (chirp:start :port port)))
 
 ;(wu:heroku-install-wupub-files)
 

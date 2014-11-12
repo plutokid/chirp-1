@@ -33,7 +33,7 @@
 
 (defvar *acceptor*)
 
-(defun start ()
+(defun start (&key (port 5000))
   (setf *acceptor*
 	(clackup
 	 (clack.builder:builder
@@ -47,7 +47,8 @@
 	   :connection-spec (envy:config :chirp.config :connection-spec)
 	   :database-type (envy:config :chirp.config :database-type))
 	  #'app-wrap)
-	 :server :hunchensocket)))
+	 :server :hunchensocket
+	 :port port)))
 
 (defun stop ()
   (clack:stop))

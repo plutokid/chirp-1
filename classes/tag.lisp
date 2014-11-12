@@ -4,7 +4,17 @@
   "The character that indicates a tag")
 
 (clsql:def-view-class tag (base)
-  ((text :type string
+  ((id :type integer
+       :db-kind :key
+       :db-constraints (:not-null :auto-increment)
+       :reader id)
+   (created-at :type clsql:wall-time
+	       :reader created-at
+	       :initform (clsql:get-time))
+   (updated-at :type clsql:wall-time
+	       :accessor updated-at
+	       :initform (clsql:get-time))
+   (text :type string
 	 :db-constraints :not-null
 	 :reader text
 	 :initarg :text)

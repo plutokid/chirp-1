@@ -1,7 +1,17 @@
 (in-package #:chirp)
 
 (clsql:def-view-class session (base)
-  ((key :type string
+  ((id :type integer
+       :db-kind :key
+       :db-constraints (:not-null :auto-increment)
+       :reader id)
+   (created-at :type clsql:wall-time
+	       :reader created-at
+	       :initform (clsql:get-time))
+   (updated-at :type clsql:wall-time
+	       :accessor updated-at
+	       :initform (clsql:get-time))
+   (key :type string
 	:db-constraints (:not-null)
 	:reader key
 	:initarg :key)

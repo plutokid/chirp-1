@@ -5,7 +5,17 @@
     (#\@ make-mention)))
 
 (clsql:def-view-class chirp (base)
-  ((user-id :type integer
+  ((id :type integer
+       :db-kind :key
+       :db-constraints (:not-null :auto-increment)
+       :reader id)
+   (created-at :type clsql:wall-time
+	       :reader created-at
+	       :initform (clsql:get-time))
+   (updated-at :type clsql:wall-time
+	       :accessor updated-at
+	       :initform (clsql:get-time))
+      (user-id :type integer
 	    :db-constraints :not-null
 	    :reader user-id
 	    :initarg :user-id)

@@ -1,7 +1,17 @@
 (in-package #:chirp)
 
 (def-view-class user (base)
-  ((username :type string
+  ((id :type integer
+       :db-kind :key
+       :db-constraints (:not-null :auto-increment)
+       :reader id)
+   (created-at :type clsql:wall-time
+	       :reader created-at
+	       :initform (clsql:get-time))
+   (updated-at :type clsql:wall-time
+	       :accessor updated-at
+	       :initform (clsql:get-time))
+   (username :type string
 	     :db-constraints (:not-null :unique)
 	     :accessor username
 	     :initarg :username)

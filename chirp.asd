@@ -11,6 +11,7 @@
                #:clsql
 	       #:clsql-postgresql
                #:cl-emb
+	       #:cl-json
 	       #:envy
 	       #:cl-who
 	       #:parenscript
@@ -33,7 +34,9 @@
 			:components ((:file "chirps")
 				     (:file "users")
 				     (:file "sessions")
-				     (:file "tags")))
+				     (:file "tags")
+				     (:module "api"
+					      :components ((:file "chirps")))))
 	       (:module "parenscript"
 			:components ((:file "package")
 				     (:file "birder")

@@ -9,10 +9,10 @@
        :db-constraints (:not-null :auto-increment)
        :reader id)
    (created-at :type clsql:wall-time
-	       :reader created-at
+;	       :reader created-at
 	       :initform (clsql:get-time))
    (updated-at :type clsql:wall-time
-	       :accessor updated-at
+;	       :accessor updated-at
 	       :initform (clsql:get-time))
    (chirp-id :type integer
 	     :db-constraints :not-null

@@ -34,8 +34,9 @@
   (unless (sb-posix:getenv "APP_ENV")
     (sb-posix:setenv "APP_ENV" "development" 0))
 
-  (load (merge-pathnames "config.lisp"
-			 (envy:config :chirp.config :application-root))))
+  ;; (load (merge-pathnames "config.lisp"
+  ;; 			 (envy:config :chirp.config :application-root)))
+  )
 
 (defun connect-to-db ()
   (clsql:connect (envy:config :chirp.config :connection-spec) :database-type (envy:config :chirp.config :database-type) ))

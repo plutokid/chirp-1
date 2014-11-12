@@ -35,7 +35,11 @@
 
 (defun start (&key (port 5000))
   (ensure-environment)
+  (chirp.config:configure)
   (create-tables)
+  ;; For the websockets, which don't get the special variable that
+  ;; dispatched requests do
+  (connect-to-db)
   (setf *acceptor*
 	(clackup
 	 (clack.builder:builder

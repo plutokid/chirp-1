@@ -1,6 +1,7 @@
 (defpackage #:chirp.config
   (:use :cl
-	:envy))
+	:envy)
+  (:export #:configure))
 
 (in-package #:chirp.config)
 
@@ -10,33 +11,37 @@
   (list host (format nil "chirp_~a" (string-downcase env)) "" ""))
 
 
-(defconfig :common
-    (let ((base-pathname (asdf:component-pathname (asdf:find-system :chirp))))
-      `(:application-root ,base-pathname
-			  :database-type :postgresql)))
-
 (defun read-secrets ()
-  (handler-case
-      (read-from-string
-       (alexandria:read-file-into-string
-	(merge-pathnames ".crypto.sexp"
-			 (envy:config :chirp.config :application-root))))
-    (error () (list :random-salt (asdf::getenv "RANDOM_SALT")))))
+  (let ((base-pathname (asdf:component-pathname (asdf:find-system :chirp))))
+    (handler-case
+	(read-from-string
+	 (alexandria:read-file-into-string
+	  (merge-pathnames ".crypto.sexp"
+			   base-pathname)))
+      (error () (list :random-salt (asdf::getenv "RANDOM_SALT"))))))
 
-(defconfig |development|
-    `(:debug t
-	     :connection-spec ,(db-spec :dev)
-	     ,@(read-secrets)))
+(defun configure ()
 
-(defconfig |test|
-    `(:debug t
-	     :connection-spec ,(db-spec :test)
-	     ,@(read-secrets)))
 
-(defconfig |production|
-    `(:debug nil
-	     :connection-spec ,(db-spec :production (asdf::getenv "DATABASE_URL"))
-	     :random-salt ,(asdf::getenv "RANDOM_SALT")))
+  (defconfig :common
+      (let ((base-pathname (asdf:component-pathname (asdf:find-system :chirp))))
+	`(:application-root ,base-pathname
+			    :database-type :postgresql)))
+
+  (defconfig |development|
+      `(:debug t
+	       :connection-spec ,(db-spec :dev)
+	       ,@(read-secrets)))
+
+  (defconfig |test|
+      `(:debug t
+	       :connection-spec ,(db-spec :test)
+	       ,@(read-secrets)))
+
+  (defconfig |production|
+      `(:debug nil
+	       :connection-spec ,(db-spec :production (asdf::getenv "DATABASE_URL"))
+	       :random-salt ,(asdf::getenv "RANDOM_SALT"))))
 
 ;; (defconfig :default
 ;;     `(,@|development|))

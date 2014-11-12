@@ -16,7 +16,7 @@
 	   (config (lambda (-web-socket-provider)
 		     (chain -web-socket-provider
 			    (prefix "")
-			    (uri "ws://localhost:5000")))))
+			    (uri "lispchirp.herokuapp.com:80")))))
 
     (chain angular
 	   (module "controllers" #())

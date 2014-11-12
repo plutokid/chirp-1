@@ -15,6 +15,7 @@
 	       #:cl-who
 	       #:parenscript
 	       #:clack.handler.hunchensocket
+	       #:sb-posix
                #:clack-middleware-clsql)
   :components ((:file "package")
 	       (:file "config")

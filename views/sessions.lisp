@@ -9,17 +9,18 @@
      (render-emb "sessions/new" (list :session (getf env :clack.session)
 				      :user nil)))))
 
+(defun log-user-in (user env)
+  (let ((session (create-session-for-user user)))
+    (setf (gethash :key (getf env :clack.session)) (key session))))
+
 (defun create-session (env)
   (let* ((params (params env :user '(:username :password)))
 	 (user   (find-user-by-credentials (getf params :username)
 					   (getf params :password))))
     (if user
 	;; User / password work
-	(let ((session (make-instance 'session
-				      :key (random-hex-string)
-				      :user-id (id user))))
-	  (clsql:update-records-from-instance session)
-	  (setf (gethash :key (getf env :clack.session)) (key session))
+	(progn
+	  (log-user-in user env)
 	  (redirect-to (user-url user)))
 
 	;; Bad login, try again.

@@ -16,7 +16,10 @@
 	   (config (lambda (-web-socket-provider)
 		     (chain -web-socket-provider
 			    (prefix "")
-			    (uri "lispchirp.herokuapp.com:80")))))
+			    (uri (lisp (format nil "ws://~a"
+					       (if (envy:config :chirp.config :debug)
+						   "localhost:5000"
+						   "lispchirp.herokuapp.com:80"))))))))
 
     (chain angular
 	   (module "controllers" #())

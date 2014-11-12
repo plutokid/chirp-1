@@ -33,4 +33,9 @@
 (defun find-session (id)
   (car (select 'session :where [= [slot-value 'session 'id] id] :flatp t)))
 
-(defun create-session-for-user ())
+(defun create-session-for-user (user)
+  (let ((session (make-instance 'session
+				:key (random-hex-string)
+				:user-id (id user))))
+    (clsql:update-records-from-instance session)
+    session))

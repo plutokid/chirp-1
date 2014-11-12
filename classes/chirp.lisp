@@ -13,9 +13,9 @@
 ;	       :reader created-at
 	       :initform (clsql:get-time))
    (updated-at :type clsql:wall-time
-;	       :accessor updated-at
+	       ;;	       :accessor updated-at
 	       :initform (clsql:get-time))
-      (user-id :type integer
+   (user-id :type integer
 	    :db-constraints :not-null
 	    :reader user-id
 	    :initarg :user-id)

@@ -12,13 +12,16 @@
 
 (defun production-db-spec ()
   "Best kind of ugly as sin"
-  (destructuring-bind (user password host port db)
-      (multiple-value-bind (string values)
-	  (ppcre:scan-to-strings
-	   "postgres://([a-z]+):([a-zA-Z0-9]+)@([a-zA-Z0-9\-\.]+):([0-9]+)/([a-zA-Z0-9]+)"
-	   (asdf::getenv "DATABASE_URL"))
-	(coerce values 'list))
-    (print (list host db user password))))
+  (let ((db-url (asdf::getenv "DATABASE_URL")))
+    (if db-url
+	(destructuring-bind (user password host port db)
+	    (multiple-value-bind (string values)
+		(ppcre:scan-to-strings
+		 "postgres://([a-z]+):([a-zA-Z0-9]+)@([a-zA-Z0-9\-\.]+):([0-9]+)/([a-zA-Z0-9]+)"
+		 db-url)
+	      (coerce values 'list))
+	  (list host db user password))
+	(list "" "" "" ""))))
 
 (defun read-secrets ()
   (let ((base-pathname (asdf:component-pathname (asdf:find-system :chirp))))

@@ -21,5 +21,12 @@
 (defmethod created-at ((object base))
   (clsql:iso-timestring (slot-value object 'created-at)))
 
+(defmethod (setf created-at) (datetime (object base))
+  (setf (slot-value object 'created-at) datetime))
+
+
 (defmethod updated-at ((object base))
   (clsql:iso-timestring (slot-value object 'updated-at)))
+
+(defmethod (setf updated-at) (datetime (object base))
+  (setf (slot-value object 'updated-at) datetime))

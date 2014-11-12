@@ -43,6 +43,7 @@
   (setf *acceptor*
 	(clackup
 	 (clack.builder:builder
+	  clack.middleware.logger:<clack-middleware-logger>
 	  (clack.middleware.static:<clack-middleware-static>
 	   :root #P"./static/"
 	   :path "/static/")

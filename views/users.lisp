@@ -10,6 +10,7 @@
 	 (user (apply #'make-instance 'user user-params)))
     (setf (password user) (getf user-params :password))
     (update-records-from-instance user)
+    (log-user-in user env)
     (redirect-to (user-url user))))
 
 (defun show-user (env)

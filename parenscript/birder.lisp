@@ -18,7 +18,7 @@
 			    (prefix "")
 			    (uri (lisp (if (envy:config :chirp.config :debug)
 					   "ws://localhost:5000"
-					   "wss://lispchirp.herokuapp.com:80")))))))
+					   "wss://lispchirp.herokuapp.com")))))))
 
     (chain angular
 	   (module "controllers" #())

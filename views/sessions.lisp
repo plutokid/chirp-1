@@ -4,10 +4,12 @@
   "/sessions")
 
 (defun new-session (env)
-  (html-response
-   (with-layout ()
-     (render-emb "sessions/new" (list :session (getf env :clack.session)
-				      :user nil)))))
+  (if-let ((session (current-session env)))
+    (redirect-to (user-url (user session)))
+    (html-response
+      (with-layout (:title "What's the secret birdsong?")
+	(render-emb "sessions/new" (list :session (getf env :clack.session)
+					 :user nil))))))
 
 (defun log-user-in (user env)
   (let ((session (create-session-for-user user)))

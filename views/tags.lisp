@@ -3,7 +3,8 @@
 (defun show-tag (env)
   (let ((tag (find-tag-by-text (getf (params env) :tag))))
     (html-response
-      (with-layout ()
+      (with-layout (:title (format nil "#~a" (text tag))
+			   :session (current-session env))
 	(who:with-html-output-to-string (str)
 	  (:h1 (str (text tag)))
 

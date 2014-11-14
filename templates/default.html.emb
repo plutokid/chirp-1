@@ -14,20 +14,18 @@
 	  <li><a href="/">Chirp!</a>
 	</ul>
 
-	<% (if (getf env :session)
-	(progn %>
+	<% @if session %>
 	<ul class="nav">
 	  <li><a href="/users/profile">You</a>
 	  <li><a href="/settings/">Settings</a>
 	  <li><a href="/logout">Log Out</a>
 	</ul>
-	<% )
-	(progn %>
+	<% @else %>
 	<ul class="nav">
 	  <li><a href="/users/new">Sign Up</a>
 	  <li><a href="/sessions/new">Log In</a>
 	</ul>
-	<% )) %>
+	<% @endif %>
 
       </nav>
     </header>

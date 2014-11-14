@@ -2,7 +2,7 @@
 
 (defun new-user (env)
   (html-response
-    (with-layout ()
+    (with-layout (:title "Get yer chirps here!" :session (current-session env))
       (render-emb "users/new" (list :session (getf env :clack.session))))))
 
 (defun create-user (env)
@@ -16,5 +16,6 @@
 (defun show-user (env)
   (let ((params (params env)))
     (html-response
-      (with-layout ()
+      (with-layout (:title (format nil "@~a's chirps" (getf params :user))
+			   :session (current-session env))
 	(render-emb "users/show" (list :username (getf params :user)))))))

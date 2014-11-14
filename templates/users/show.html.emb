@@ -1,7 +1,7 @@
 <h1 class="title"><%= @var username %></h1>
 
 <div ng-controller="ChirpController">
-  <div class="chirp" ng-repeat="chirp in chirps">
+  <div class="chirp" ng-repeat="chirp in chirps | orderBy:'created_at':true">
     <div class="chirp-header">
       <img src="/static/gusty.jpg" class="chirp-img">
       <a href="{{ chirp.user-url }}" class="chirp-username">{{ chirp.username }}</a>

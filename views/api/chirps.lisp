@@ -1,7 +1,7 @@
 (in-package #:chirp)
 
 (defun json-chirps (&optional (stream *standard-output*))
-  (let ((chirps (select 'chirp :flatp t)))
+  (let ((chirps (select 'chirp :flatp t :caching nil)))
     (json:with-object (stream)
       (json:as-object-member ("chirps" stream)
 	(json:with-array (stream)

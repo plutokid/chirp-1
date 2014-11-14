@@ -2,10 +2,10 @@
 
 (defun index (env)
   (html-response
-    (with-layout (:title "Chirp!")
+    (with-layout (:title "Chirp!" :session (current-session env))
       (who:with-html-output-to-string (str)
 	(:div
-	 (:h1 :class "title""Welcome to the club")
+	 (:h1 :class "title" "Welcome to the club")
 	 (:p "As the world's leading site dedicated to pretending to be birds, we welcome you under our wing!"))))))
 
 (defroutes *app*

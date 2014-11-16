@@ -27,8 +27,15 @@
 	   :db-kind :join
 	   :db-info (:join-class chirp
 		     :foreign-key user-id
-		     :home-key id)
-	   :accessor chirps))
+		     :home-key id
+		     :set t)
+	   :accessor chirps)
+   (sessions :type sessions
+	     :db-kind :join
+	     :db-info (:join-class session
+		       :foreign-key user-id
+		       :home-key id
+		       :set t)))
   (:base-table users)
   (:extra-initargs '(:password)))
 

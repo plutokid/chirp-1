@@ -25,6 +25,11 @@
 
   (GET  "/tags/:tag"    #'show-tag)
 
+  ;; API
+  (GET  "/api/chirps"   #'json-show-chirps)
+
+  ;; Parenscript
+
   (GET  "/ps/birder.js" #'chirp.ps:birder)
   (GET  "/ps/timeago.js"#'chirp.ps:timeago))
 

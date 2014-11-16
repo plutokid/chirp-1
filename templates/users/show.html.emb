@@ -5,7 +5,7 @@
     <div class="chirp-header">
       <img src="/static/gusty.jpg" class="chirp-img">
       <a href="{{ chirp.user-url }}" class="chirp-username">{{ chirp.username }}</a>
-      <span class="chirp-timeago">{{ timeago(chirp.created_at) }}</span>
+      <span class="chirp-timeago">{{ timeago(chirp.created-at) }}</span>
     </div>
 
     <div class="chirp-body" ng-bind-html="chirp.content"></div>

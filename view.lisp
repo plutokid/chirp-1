@@ -15,6 +15,11 @@
      (:content-type "text/javascript")
      ,(ps:ps ,@body)))
 
+(defmacro json-response (&body body)
+  ``(200
+     (:content-type "text/json")
+     ,,@body))
+
 (defmacro redirect-to (url &body body)
   ``(302
     (:location ,,url)

@@ -17,7 +17,7 @@
 
 (defmacro json-response (&body body)
   ``(200
-     (:content-type "text/json")
+     (:content-type "application/json")
      ,,@body))
 
 (defmacro redirect-to (url &body body)

@@ -46,6 +46,9 @@
     <script src="/static/angular.js"></script>
     <script src="/static/angular-sanitize.js"></script>
     <script src="/static/angular-websocket.js"></script>
+    <script src="/static/angular-route.js"></script>
+    <script src="/static/angular-resource.js"></script>
+    <script src="/static/chirp-parser.js"></script>
     <script src="/ps/birder.js"></script>
     <script src="/ps/timeago.js"></script>
   </body>

@@ -1,0 +1,24 @@
+<section class="user">
+  <img ng-src="{{ user.avatar_url }}" class="user-avatar">
+  <div class="user-info">
+    <h2>{{ user.username }}</h2>
+    <div class="follow">
+      <table>
+	<tr><th><a href="{{ '/users/' + user.username + '/followers' }}">Followers</a></th><th><a href="{{ '/users/' + user.username + '/following' }}">Following</a></th></tr>
+	<tr><td><a href="{{ '/users/' + user.username + '/followers' }}">{{ user.followers_number }}</a></td><td><a href="{{ '/users/' + user.username + '/following' }}">{{ user.following_number }}</a></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="chirps">
+  <div class="chirp" ng-repeat="chirp in chirps | orderBy:'createdAt':true">
+    <div class="chirp-header">
+      <img ng-src="{{ chirp.user_avatar }}" class="chirp-img">
+      <a href="{{ '#' + chirp.user_url }}" class="chirp-username">{{ '@' + chirp.username }}</a>
+      <span class="chirp-timeago">{{ chirp.created_at | timeago }}</span>
+    </div>
+
+    <div class="chirp-body" ng-bind-html="chirp.content | chirpContent"></div>
+  </div>
+</section>

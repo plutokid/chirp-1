@@ -43,3 +43,10 @@
 (defun current-session (env)
   (let ((key (gethash :key (getf env :clack.session))))
     (first (clsql:select 'session :where [= [slot-value 'session 'key] key] :flatp t))))
+
+(defun current-user-p (env user)
+  (let ((current-user (user (current-session env))))
+    (etypecase user
+      (user (= (id user) (id current-user)))
+      (number (= user (id current-user)))
+      (string (string= user (username current-user))))))

@@ -14,15 +14,16 @@
 	     (then (chain (new (-date time)) (get-time)))
 	     (difference (/ (- now then) 1000))
 	     (result ""))
+	(when (< difference 1)
+	  (return-from timeago "just now"))
 
 	(loop
 	   for (period seconds) in periods
 	   for time = (floor difference seconds)
 	   when (>= difference seconds)
-	   return (setf result
-			(concatenate 'string
-				     time
-				     " "
-				     period
-				     (if (> time 1) "s " " ") "ago")))
-	result))))
+	   do (return-from timeago
+		(concatenate 'string
+			     time
+			     " "
+			     period
+			     (if (> time 1) "s " " ") "ago")))))))

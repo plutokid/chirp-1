@@ -1,8 +1,8 @@
 (in-package #:chirp)
 
 (defun json-chirps (chirps &optional (stream *standard-output*))
-  ;let ((chirps (select 'chirp :flatp t :caching nil)))
   (json:with-array (stream)
+    (clsql:update-objects-joins chirps)
     (dolist (chirp chirps)
       (json:as-array-member (stream)
 	(json-chirp chirp stream)))))
@@ -11,7 +11,7 @@
   (clsql-sys:update-instance-from-records chirp)
   (with-slots (id author) chirp
       (json:with-object (stream)
-	(json:encode-object-member "id" id stream)
+;	(json:encode-object-member "id" id stream)
 	(json:encode-object-member "username" (username author) stream)
 	(json:encode-object-member "user_url" (user-url author) stream)
 	(json:encode-object-member "user_avatar" "/static/gusty.jpg" stream)
@@ -23,8 +23,6 @@
     (json:encode-object-member "result" "error" stream)
     (json:encode-object-member "message" (apply #'format nil datum arguments) stream)))
 
-(clsql:file-enable-sql-reader-syntax)
-
 (defun json-show-chirps (env)
   (json-response
     (with-output-to-string (s)
@@ -35,9 +33,9 @@
 	   (let ((user (find-user-by-username (getf chirp-params :username))))
 	     (json:with-object (s)
 	       (json:as-object-member ("chirps" s)
-					  (json-chirps (chirps user) s))
+		 (json-chirps (find-chirps-for-user-and-follows user) s))
 	       (json:as-object-member ("user" s)
-					  (json-show-user user env s)))))
+		 (json-show-user user env s)))))
 	  ((string= request-type "tag")
 	   (let ((text (getf chirp-params :text)))
 	     (json:with-object (s)

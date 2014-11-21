@@ -53,10 +53,10 @@
 		       (create
 			:user (create
 			       :method "GET"
-			       :params (create :request[type] "user"))
+			       :params (create "request[type]" "user"))
 			:tag  (create
 			       :method "GET"
-			       :params (create :request[type] "tag"))))))
+			       :params (create "request[type]" "tag"))))))
 
 	   (config (lambda (-web-socket-provider $route-provider)
 		     ;; Access to the JSON API
@@ -88,8 +88,7 @@
 			  (setf (@ $scope timeago) timeago)
 
 			  (chain -chirps
-				 (user (create :request[username]
-					       (@ $route-params username)))
+				 (user (create "request[username]" (@ $route-params username)))
 				 $promise
 				 (then (lambda (response)
 					 (setf (@ $scope chirps) (@ response chirps)
@@ -110,14 +109,23 @@
 			(lambda ($scope $route-params -chirps)
 			  (setf (@ $scope timeago) timeago)
 			  (chain -chirps
-				 (tag (create :request[text] (@ $route-params text)))
+				 (tag (create "request[text]" (@ $route-params text)))
 				 $promise
 				 ;; FIXME: Check errors
 				 (then (lambda (response)
 					 (chain console (log response))
 					 (setf (@ $scope chirps) (@ response chirps)
 					       (@ $scope tag) (@ response tag))
-					 ))))))
+					 ))))
+			)
+		       )
+	   (controller "NewChirpController"
+		       (list "$scope" "Chirps"
+			     (lambda ($scope -chirps)
+			       (setf (@ $scope new-chirp)
+				     (lambda ()
+				       (when (@ $scope chirpContent)
+					 (chain console (log (@ $scope chirpContent)))))))))
 	   ;; (controller "ChirpController"
 	   ;; 	       (lambda ($scope -web-socket)
 

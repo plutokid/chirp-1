@@ -13,7 +13,7 @@
 		  (print (list :session (getf env :clack.session)))))))
 
 (defun create-chirp (env)
-  (let* ((chirp-params (append (params env :chirp '(:content)) `(:user-id ,(id (user (current-session env))))))
+  (let* ((chirp-params (append (params env :chirp '(:content)) `(:user-id ,(id (current-user env)))))
 	 (chirp (apply #'make-instance 'chirp chirp-params)))
     (update-records-from-instance chirp)
     (extract-references chirp)

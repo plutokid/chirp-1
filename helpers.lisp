@@ -1,6 +1,6 @@
 (in-package #:chirp)
 
-(defparameter +view-classes+ '(user chirp tag tagging mention session follow))
+(defparameter +view-classes+ '(user chirp tag tagging mention session))
 
 (defun create-tables ()
   ;; Only try to create the database if we're in debug (local computer) mode

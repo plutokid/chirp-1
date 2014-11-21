@@ -9,17 +9,4 @@
 
 * To Do list
 
-** DONE Auth
-CLOSED: [2014-11-17 Mon 07:49]
-
-** TODO Use lass for css
-
-** DONE get angular router working
-CLOSED: [2014-11-20 Thu 10:05]
-
-*** DONE Defining resource to deal with JSON API
-CLOSED: [2014-11-20 Thu 10:05]
-
-** TODO Add 'new chirp' box to user page
-
-** TODO Push notifications with websockets
+** TODO Auth

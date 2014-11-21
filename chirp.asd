@@ -8,7 +8,7 @@
   :depends-on (#:clack
 	       #:clack-app-route ;#:ningle
 	       #:clack-middleware-csrf
-               #:clsql-helper
+               #:clsql
 	       #:clsql-postgresql
                #:cl-emb
 	       #:cl-json
@@ -28,8 +28,7 @@
 				     (:file "tag")
 				     (:file "tagging")
 				     (:file "mention")
-				     (:file "chirp")
-				     (:file "follow")))
+				     (:file "chirp")))
 	       (:file "view")
 	       (:module "views"
 			:components ((:file "chirps")
@@ -37,8 +36,7 @@
 				     (:file "sessions")
 				     (:file "tags")
 				     (:module "api"
-					      :components ((:file "chirps")
-							   (:file "users")))))
+					      :components ((:file "chirps")))))
 	       (:module "parenscript"
 			:components ((:file "package")
 				     (:file "birder")

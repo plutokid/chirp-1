@@ -64,12 +64,6 @@
 		 :where [= [slot-value 'user 'username] username]
 		 :flatp t)))
 
-(defun find-user (user)
-  (etypecase user
-    (user user)
-    (string (find-user-by-username user))
-    (integer (first (select 'user :where [= [slot-value 'user 'id] user] :flatp t)))))
-
 (defun find-user-by-credentials (username password)
   (let ((user (find-user-by-username username)))
     (when (check-password password (password-digest user))
@@ -77,15 +71,3 @@
 
 (defun find-chirps-by-username (username)
   (chirps (find-user-by-username username)))
-
-;; FIXME: This is really hacky and maybe injection-unsafe
-;; there's not much else I can do with clsql, though
-(defun find-chirps-for-user-and-follows (user)
-  (when-let ((user (find-user user)))
-    (clsql-helper:db-objs
-     'chirp
-     (format nil
-	     "SELECT chirps.*
-  FROM chirps
-  LEFT OUTER JOIN follows ON follows.follower_id = ~d
-  WHERE chirps.user_id = ~d OR chirps.user_id = follows.followee_id" (id user) (id user)))))

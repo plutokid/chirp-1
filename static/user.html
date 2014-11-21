@@ -1,5 +1,5 @@
 <section class="user">
-  <img ng-src="{{ user.user_avatar }}" class="user-avatar">
+  <img ng-src="{{ user.avatar_url }}" class="user-avatar">
   <div class="user-info">
     <h2>{{ user.username }}</h2>
     <div class="follow">
@@ -9,14 +9,10 @@
       </table>
     </div>
   </div>
-  <form ng-controller="NewChirpController" ng-submit="newChirp()" ng-if="user.current_user">
-    <textarea class="new-chirp-box" ng-model="content" name="chirpContent"></textarea>
-    <input type="submit" value="Chirp!">
-  </form>
 </section>
 
 <section class="chirps">
-  <div class="chirp" ng-repeat="chirp in chirps | orderBy:'created_at':true">
+  <div class="chirp" ng-repeat="chirp in chirps | orderBy:'createdAt':true">
     <div class="chirp-header">
       <img ng-src="{{ chirp.user_avatar }}" class="chirp-img">
       <a href="{{ '#' + chirp.user_url }}" class="chirp-username">{{ '@' + chirp.username }}</a>

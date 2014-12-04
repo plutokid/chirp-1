@@ -49,7 +49,8 @@
     (user session)))
 
 (defun current-user-p (env user)
-  (let ((current-user (user (current-session env))))
+  (when-let* ((session (current-session env))
+	      (current-user (user session)))
     (etypecase user
       (user (= (id user) (id current-user)))
       (number (= user (id current-user)))

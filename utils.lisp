@@ -20,11 +20,10 @@
 (defun params (env &optional require permits)
   (let* ((request (clack.request:make-request env))
 	 (body-params (slot-value request 'clack.request::body-parameters))
-	 (all-parameters (print
-			  (append
-			   (remove-from-plist body-params :json)
-			   (slot-value request 'clack.request::query-parameters)
-			   (keywordify-plist (hash-table-plist (getf body-params :json (make-hash-table))))))))
+	 (all-parameters (append
+			  (remove-from-plist body-params :json)
+			  (slot-value request 'clack.request::query-parameters)
+			  (keywordify-plist (hash-table-plist (getf body-params :json (make-hash-table)))))))
 
     ;; Route parameters don't get whitelisted
     (append

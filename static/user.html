@@ -18,7 +18,7 @@
 </section>
 
 <section class="chirps">
-  <div class="chirp" ng-repeat="chirp in chirps | orderBy:'createdAt':true">
+  <div class="chirp" ng-repeat="chirp in chirps | orderBy:'created_at':true">
     <div class="chirp-header">
       <img ng-src="{{ chirp.user_avatar }}" class="chirp-img">
       <a href="{{ '#' + chirp.user_url }}" class="chirp-username">{{ '@' + chirp.username }}</a>

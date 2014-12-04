@@ -22,13 +22,13 @@
 		       (create
 			:user (create
 			       :method "GET"
-			       :params (create :request[type] "user"))
+			       :params (create "request[type]" "user"))
 			:tag  (create
 			       :method "GET"
 			       :params (create "request[type]" "tag"))
 			:post (create
 			       :method "POST"
-			       :params (create "_csrf_token" "post"))))))
+			       :params (create "_csrf_token" (@ window csrf-token)))))))
 
 	   (config (lambda (-web-socket-provider $route-provider)
 		     ;; Access to the JSON API
@@ -59,7 +59,7 @@
 			  (setf (@ $scope timeago) timeago)
 
 			  (chain -chirps
-				 (user (create :request[username]
+				 (user (create "request[username]"
 					       (@ $route-params username)))
 				 $promise
 				 (then (lambda (response)
@@ -95,8 +95,8 @@
 
 	   ;; Just get users working first...
 	   (controller "NewChirpController"
-		       (list "$scope" "Chirps"
-			     (lambda ($scope -chirps)
+		       (list "$scope" "$http"
+			     (lambda ($scope $http)
 			       (setf (@ $scope new-chirp)
 				     (lambda ()
 				       (chain console
@@ -104,10 +104,12 @@
 						   (@ $scope chirp content)
 						   (@ window csrf-token)))
 				       (when (> (@ $scope chirp content length) 0)
-					 (chain -chirps
-						(post "/api/chirps"
-						      (create
-						       "request[content]" (@ $scope chirp content)))
+					 (chain $http
+						(post
+						 "/api/chirps"
+						 (create
+						  "request[content]" (@ $scope chirp content)
+						  "_csrf_token" (@ window csrf-token)))
 						(success (lambda (data)
 							   (chain console (log data))))
 						(error (lambda (data)

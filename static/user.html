@@ -9,10 +9,12 @@
       </table>
     </div>
   </div>
-  <form ng-controller="NewChirpController" ng-submit="newChirp()" ng-if="user.current_user">
-    <textarea class="new-chirp-box" ng-model="content" name="chirpContent"></textarea>
-    <input type="submit" value="Chirp!">
-  </form>
+  <div ng-if="user.current_user">
+      <form ng-controller="NewChirpController">
+	  <textarea class="new-chirp-box" ng-model="chirp.content" id="chirpContent" required="true"></textarea>
+	  <input type="submit" ng-click="newChirp()" value="Chirp!">
+      </form>
+  </div>
 </section>
 
 <section class="chirps">

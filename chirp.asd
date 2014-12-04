@@ -32,26 +32,18 @@
 				     (:file "tag")
 				     (:file "tagging")
 				     (:file "mention")
-<<<<<<< HEAD
-				     (:file "chirp")))
-=======
 				     (:file "chirp")
 				     (:file "follow")))
 	       ;; Code that helps render content
->>>>>>> angularize
 	       (:file "view")
 	       (:module "views"
 			:components ((:file "users")
 				     (:file "sessions")
 				     (:module "api"
-<<<<<<< HEAD
-					      :components ((:file "chirps")))))
-=======
 					      :components ((:file "chirps")
 							   (:file "users")))))
 
 	       ;; Because writing javascript was too easy
->>>>>>> angularize
 	       (:module "parenscript"
 			:components ((:file "package")
 				     (:file "birder")

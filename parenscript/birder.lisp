@@ -76,23 +76,6 @@
 			  ;; Tell our websocket who we're looking at
 			  (when (chain -web-socket (ready-state))
 			    (chain -web-socket
-<<<<<<< HEAD
-				   (send (chain angular (to-json (list "user_channel" (@ $route-params username))))))))))
-
-	   (controller "TagController"
-		       (list "$scope" "$routeParams" "Chirps"
-			(lambda ($scope $route-params -chirps)
-			  (setf (@ $scope timeago) timeago)
-			  (chain -chirps
-				 (tag (create :request[text] (@ $route-params text)))
-				 $promise
-				 ;; FIXME: Check errors
-				 (then (lambda (response)
-					 (chain console (log response))
-					 (setf (@ $scope chirps) (@ response chirps)
-					       (@ $scope tag) (@ response tag))
-					 ))))))
-=======
 				   (send (chain angular (to-json (list "user" (@ $route-params username))))))))))
 
 	   ;; (controller "TagController"
@@ -130,7 +113,6 @@
 						(error (lambda (data)
 							 (chain console (log data "error!"))))))))
 			       nil)))
->>>>>>> angularize
 	   ;; (controller "ChirpController"
 	   ;; 	       (lambda ($scope -web-socket)
 

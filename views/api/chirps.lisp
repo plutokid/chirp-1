@@ -39,13 +39,9 @@
 	       (json:as-object-member ("chirps" s)
 					  (json-chirps (chirps user) s))
 	       (json:as-object-member ("user" s)
-<<<<<<< HEAD
-					  (json-show-user user env s)))))
-=======
 		 (json-show-user user env s)))))
 
 	  ;; Request for a tag page
->>>>>>> angularize
 	  ((string= request-type "tag")
 	   (let ((text (getf chirp-params :text)))
 	     (json:with-object (s)

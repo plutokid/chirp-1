@@ -44,13 +44,10 @@
   (let ((key (gethash :key (getf env :clack.session))))
     (first (clsql:select 'session :where [= [slot-value 'session 'key] key] :flatp t))))
 
-<<<<<<< HEAD
-=======
 (defun current-user (env)
   (when-let ((session (current-session env)))
     (user session)))
 
->>>>>>> angularize
 (defun current-user-p (env user)
   (let ((current-user (user (current-session env))))
     (etypecase user

@@ -1,5 +1,7 @@
 (in-package #:chirp)
 
+;; Manages api requests to /api/chirps
+
 (defun json-chirps (chirps &optional (stream *standard-output*))
   (json:with-array (stream)
     (clsql:update-objects-joins chirps)

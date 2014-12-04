@@ -45,10 +45,10 @@
 			      (create
 			       controller "UserController"
 			       template-url "/static/user.html"))
-			      (create
-			    (when "/tags/:text"
-			       controller "TagController"
-			       template-url "/static/tag.html"))
+			    ;; (when "/tags/:text"
+			    ;;   (create
+			    ;;    controller "TagController"
+			    ;;    template-url "/static/tag.html"))
 			    (otherwise
 			     (create
 			      redirect-to "/")))))

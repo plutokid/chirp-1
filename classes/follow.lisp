@@ -7,10 +7,12 @@
        :reader id)
    (created-at :type clsql:wall-time
 ;	       :reader created-at
-	       :initform (clsql:get-time))
+	       :initform (clsql:get-time)
+	       :initarg :created-at)
    (updated-at :type clsql:wall-time
 ;	       :accessor updated-at
-	       :initform (clsql:get-time))
+	       :initform (clsql:get-time)
+	       :initarg :updated-at)
    (follower-id :type integer
 		:initarg :follower-id)
    (follower :type user

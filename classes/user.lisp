@@ -7,10 +7,12 @@
        :reader id)
    (created-at :type clsql:wall-time
 ;	       :reader created-at
-	       :initform (clsql:get-time))
+	       :initform (clsql:get-time)
+	       :initarg :created-at)
    (updated-at :type clsql:wall-time
 ;	       :accessor updated-at
-	       :initform (clsql:get-time))
+	       :initform (clsql:get-time)
+	       :initarg :updated-at)
    (username :type string
 	     :db-constraints (:not-null :unique)
 	     :accessor username
@@ -57,7 +59,7 @@
   (setf (password-digest user) (hash-password password)))
 
 (defun user-url (user)
-  (format nil "/users/~d" (username user)))
+  (format nil "/#/users/~d" (username user)))
 
 (defun find-user-by-username (username)
   (first (select 'user
@@ -85,7 +87,30 @@
     (clsql-helper:db-objs
      'chirp
      (format nil
-	     "SELECT chirps.*
+	     "SELECT chirps.content,  chirps.user_id,  chirps.created_at,  chirps.updated_at,  chirps.id
   FROM chirps
   LEFT OUTER JOIN follows ON follows.follower_id = ~d
   WHERE chirps.user_id = ~d OR chirps.user_id = follows.followee_id" (id user) (id user)))))
+
+(defgeneric followers-count (user)
+  (:method  ((user user))
+    (car (format-query "SELECT COUNT(follows.*)
+ FROM follows
+ WHERE follows.followee_id = ~d" (id user)))))
+
+(defgeneric follows-count (user)
+  (:method ((user user))
+    (car (format-query "SELECT COUNT(follows.*)
+ FROM follows
+ WHERE follows.follower_id = ~d" (id user)))))
+
+(defun follow-information-for-user (user)
+  (let* ((user (find-user user))
+	 (follows (car (format-query "SELECT COUNT(follows.*) FROM follows WHERE follows.follower_id = ~d" (id user))))
+	 (followers (car (format-query "SELECT COUNT(follows.*) FROM follows WHERE follows.followee_id = ~d" (id user)))))))
+
+(defun user-following-p (follower followee)
+  (when (and follower followee)
+    (not (string= "f" (car (format-query "SELECT COUNT(follows.id) > 0
+FROM follows
+WHERE follows.follower_id = ~d AND follows.followee_id = ~d" (id follower) (id followee)))))))

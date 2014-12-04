@@ -2,14 +2,21 @@
 
 (defun index (env)
   (html-response
+
     (with-layout (:title "Chirp!" :session (current-session env))
       (who:with-html-output-to-string (str)
-	;; (:div
-	;;  (:h1 :class "title" "Welcome to the club")
-	;;  (:p "As the world's leading site dedicated to pretending to be birds, we welcome you under our wing!"))
+	(:script
+	 (str
+	  (ps:ps
+	    (setf csrf-token
+		  (ps:lisp (clack.middleware.csrf:csrf-token (getf env :clack.session)))))))
+	 ;; (:div
+	 ;;  (:h1 :class "title" "Welcome to the club")
+	 ;;  (:p "As the world's leading site dedicated to pretending to be birds, we welcome you under our wing!"))
+
 
 	(:div :ng-view "true")
-      ))))
+	 ))))
 
 (defroutes *app*
   (GET  "/"             #'index)
@@ -18,18 +25,20 @@
   (GET  "/logout"       #'end-session)
   (POST "/sessions"     #'create-session)
 
-  (POST "/users"        #'create-user)
-  (GET  "/users/new"    #'new-user)
-  (GET  "/users/:user"  #'show-user)
+  ;; One page app! (aside from login/out)
+  ;; (POST "/users"        #'create-user)
+  ;; (GET  "/users/new"    #'new-user)
+  ;; (GET  "/users/:user"  #'show-user)
 
-  (GET  "/chirps/new"   #'new-chirp)
-  (GET  "/chirps/:id"   #'show-chirp)
-  (POST "/chirps"       #'create-chirp)
+  ;; (GET  "/chirps/new"   #'new-chirp)
+  ;; (GET  "/chirps/:id"   #'show-chirp)
+  ;; (POST "/chirps"       #'create-chirp)
 
   (GET  "/tags/:tag"    #'show-tag)
 
   ;; API
   (GET  "/api/chirps"   #'json-show-chirps)
+  (POST "/api/chirps"   #'json-post-chirp)
 
   ;; Parenscript
 
@@ -56,8 +65,7 @@
 	   :root #P"./static/"
 	   :path "/static/")
 	  clack.middleware.session:<clack-middleware-session>
-	  (clack.middleware.csrf:<clack-middleware-csrf>
-	   :one-time-p t)
+	  clack.middleware.csrf:<clack-middleware-csrf>
 	  (clack.middleware.clsql:<clack-middleware-clsql>
 	   :connection-spec (envy:config :chirp.config :connection-spec)
 	   :database-type (envy:config :chirp.config :database-type))

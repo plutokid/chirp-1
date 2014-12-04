@@ -1,8 +1,0 @@
-<h1 class="title">New Chirp</h1>
-
-<form action="/chirps" method="POST">
-  <%= (clack.middleware.csrf:csrf-html-tag (getf env :session)) %>
-  <textarea name="chirp[content]"><% (let ((chirp (getf env :chirp))) (when chirp (content chirp))) %></textarea>
-  <br>
-  <button>Chirp!</button>
-</form>

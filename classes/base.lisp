@@ -14,6 +14,18 @@
    ;; 	       :initform (clsql:get-time))
    ))
 
+;; (defmethod print-object ((object base) stream)
+;;   (let ((class (class-of object)))
+;;     (print-unreadable-object (object stream :type t :identity t)
+;;       (loop
+;; 	 for slot in (sb-mop:class-direct-slots class)
+;; 	 for slot-name = (sb-mop:slot-definition-name slot)
+
+;; 	 when (slot-boundp object slot-name)
+;; 	 do (format stream "~a = ~a"
+;; 		    slot-name
+;; 		    (sb-mop:slot-value-using-class class object slot))))))
+
 (defmethod clsql:update-records-from-instance :before ((object base) &key database)
   (declare (ignore database))
   (setf (updated-at object) (clsql:get-time)))

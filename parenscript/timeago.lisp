@@ -2,7 +2,9 @@
 
 (export 'timeago)
 (defun timeago (env)
+  (declare (ignore env))
   (chirp::js-response
+
     (defun timeago (time)
       (let* ((periods '(("year"   31449600)
 			("week"   6048000)
@@ -14,6 +16,7 @@
 	     (then (chain (new (-date time)) (get-time)))
 	     (difference (/ (- now then) 1000))
 	     (result ""))
+
 	(when (< difference 1)
 	  (return-from timeago "just now"))
 

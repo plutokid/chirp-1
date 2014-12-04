@@ -11,10 +11,12 @@
        :reader id)
    (created-at :type clsql:wall-time
 ;	       :reader created-at
-	       :initform (clsql:get-time))
+	       :initform (clsql:get-time)
+	       :initarg :created-at )
    (updated-at :type clsql:wall-time
 	       ;;	       :accessor updated-at
-	       :initform (clsql:get-time))
+	       :initform (clsql:get-time)
+	       :initarg :updated-at)
    (user-id :type integer
 	    :db-constraints :not-null
 	    :reader user-id
@@ -25,7 +27,6 @@
 	   :db-info (:join-class user
 		     :home-key user-id
 		     :foreign-key id
-		     :retrieval :immediate
 		     :set nil))
    ;; FIXME: Through associations?
    (mentions :type list
@@ -61,6 +62,13 @@
 
 (defun all-chirps ()
   (select 'chirp))
+
+(defun make-chirp-for-current-user (content env)
+  (when-let ((user (current-user env)))
+    (let ((chirp (make-instance 'chirp :content content :user-id (id user))))
+      (update-records-from-instance chirp)
+      (extract-references chirp)
+      chirp)))
 
 (defun extract-references (chirp)
   (let ((body (content chirp)))

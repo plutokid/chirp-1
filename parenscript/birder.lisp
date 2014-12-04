@@ -1,36 +1,5 @@
 (in-package #:chirp.ps)
 
-(setf hunchensocket:*websocket-dispatch-table*
-      (list (lambda (req)
-	      (make-instance 'hunchensocket:websocket-resource))))
-
-(defmethod hunchensocket:client-connected ((channel hunchensocket:websocket-resource) client)
-  (hunchensocket:send-text-message
-   client
-   (with-output-to-string (s)
-     (chirp::json-chirps (clsql:select 'chirp::chirp :flatp t) s))))
-
-(defmethod hunchensocket:text-message-received
-    ((channel hunchensocket:websocket-resource)
-     (client hunchensocket:websocket-client)
-     data)
-
-  (log4cl:log-info "Got a message! ~a" data)
-  ;; data is JSON here
-  (case (getf data :message)
-    ("user_chirps" )
-    ("single_chirp")))
-
-(defmethod hunchensocket:text-message-received :around
-    ((channel hunchensocket:websocket-resource)
-     (client hunchensocket:websocket-client)
-     message)
-
-  ;; Decode the JSON!
-  (let ((data (json:decode-json-from-string message)))
-    (call-next-method channel client data)))
-
-
 (export 'birder)
 (defun birder (env)
   (declare (ignore env))
@@ -56,7 +25,10 @@
 			       :params (create :request[type] "user"))
 			:tag  (create
 			       :method "GET"
-			       :params (create :request[type] "tag"))))))
+			       :params (create "request[type]" "tag"))
+			:post (create
+			       :method "POST"
+			       :params (create "_csrf_token" "post"))))))
 
 	   (config (lambda (-web-socket-provider $route-provider)
 		     ;; Access to the JSON API
@@ -65,19 +37,18 @@
 			    (uri (lisp (if (envy:config :chirp.config :debug)
 					   "ws://localhost:5000"
 					   "wss://lispchirp.herokuapp.com"))))
-
 		     (chain $route-provider
-			    ;; (when "/"
-			    ;;   (create
-			    ;;    :template-uri "/static/landing.html"))
+			    (when "/"
+			      (create
+			       :template-uri "/static/landing.html"))
 			    (when "/users/:username"
 			      (create
 			       controller "UserController"
 			       template-url "/static/user.html"))
-			    (when "/tags/:text"
-			      (create
-			       controller "TagController"
-			       template-url "/static/tag.html"))
+			    ;; (when "/tags/:text"
+			    ;;   (create
+			    ;;    controller "TagController"
+			    ;;    template-url "/static/tag.html"))
 			    (otherwise
 			     (create
 			      redirect-to "/")))))
@@ -93,16 +64,19 @@
 				 $promise
 				 (then (lambda (response)
 					 (setf (@ $scope chirps) (@ response chirps)
-					       (@ $scope user) (@ response user))
-					 (chain console (log (@ $scope user))))))
+					       (@ $scope user) (@ response user)))))
+			  (setf (@ window onbeforeunload)
+				(lambda ()
+				  (chain -web-socket (close))))
 
-			  (chain -web-socket
-				 (onmessage (lambda (event)
-					      (chain console (log event)))))
+;
+			  ;; (chain -web-socket
+			  ;; 	 (onmessage (lambda (event) (chain console (log event)))))
 
 			  ;; Tell our websocket who we're looking at
 			  (when (chain -web-socket (ready-state))
 			    (chain -web-socket
+<<<<<<< HEAD
 				   (send (chain angular (to-json (list "user_channel" (@ $route-params username))))))))))
 
 	   (controller "TagController"
@@ -118,6 +92,45 @@
 					 (setf (@ $scope chirps) (@ response chirps)
 					       (@ $scope tag) (@ response tag))
 					 ))))))
+=======
+				   (send (chain angular (to-json (list "user" (@ $route-params username))))))))))
+
+	   ;; (controller "TagController"
+	   ;; 	       (list "$scope" "$routeParams" "Chirps"
+	   ;; 		(lambda ($scope $route-params -chirps)
+	   ;; 		  (setf (@ $scope timeago) timeago)
+	   ;; 		  (chain -chirps
+	   ;; 			 (tag (create "request[text]" (@ $route-params text)))
+	   ;; 			 $promise
+	   ;; 			 ;; FIXME: Check errors
+	   ;; 			 (then (lambda (response)
+	   ;; 				 (setf (@ $scope chirps) (@ response chirps)
+	   ;; 				       (@ $scope tag) (@ response tag))
+	   ;; 				 ))))
+	   ;; 		)
+	   ;; 	       )
+
+	   ;; Just get users working first...
+	   (controller "NewChirpController"
+		       (list "$scope" "Chirps"
+			     (lambda ($scope -chirps)
+			       (setf (@ $scope new-chirp)
+				     (lambda ()
+				       (chain console
+					      (log "Trying to post a new chirp"
+						   (@ $scope chirp content)
+						   (@ window csrf-token)))
+				       (when (> (@ $scope chirp content length) 0)
+					 (chain -chirps
+						(post "/api/chirps"
+						      (create
+						       "request[content]" (@ $scope chirp content)))
+						(success (lambda (data)
+							   (chain console (log data))))
+						(error (lambda (data)
+							 (chain console (log data "error!"))))))))
+			       nil)))
+>>>>>>> angularize
 	   ;; (controller "ChirpController"
 	   ;; 	       (lambda ($scope -web-socket)
 

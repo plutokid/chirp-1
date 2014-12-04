@@ -8,11 +8,23 @@
 
 ;; (params env '(:user (:username :password :email)))
 
+(defun keywordify-plist (plist)
+  (loop
+     for val in plist
+     for i from 0 by 1
+     if (evenp i)
+     collect (make-keyword val)
+     else
+     collect val))
+
 (defun params (env &optional require permits)
   (let* ((request (clack.request:make-request env))
-	 (all-parameters (append
-			  (slot-value request 'clack.request::body-parameters)
-			  (slot-value request 'clack.request::query-parameters))))
+	 (body-params (slot-value request 'clack.request::body-parameters))
+	 (all-parameters (print
+			  (append
+			   (remove-from-plist body-params :json)
+			   (slot-value request 'clack.request::query-parameters)
+			   (keywordify-plist (hash-table-plist (getf body-params :json (make-hash-table))))))))
 
     ;; Route parameters don't get whitelisted
     (append
@@ -45,3 +57,6 @@
 
 (defun random-hex-string ()
   (ironclad:byte-array-to-hex-string (ironclad:make-random-salt)))
+
+(defun format-query (query &rest args)
+  (clsql:query (apply #'format nil query args) :flatp t :field-names nil))

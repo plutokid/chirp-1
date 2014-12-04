@@ -66,6 +66,12 @@
 		 :where [= [slot-value 'user 'username] username]
 		 :flatp t)))
 
+(defun find-user (user)
+  (etypecase user
+    (user user)
+    (string (find-user-by-username user))
+    (integer (first (select 'user :where [= [slot-value 'user 'id] user] :flatp t)))))
+
 (defun find-user-by-credentials (username password)
   (let ((user (find-user-by-username username)))
     (when (check-password password (password-digest user))

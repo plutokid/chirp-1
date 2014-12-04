@@ -5,6 +5,7 @@
       <% @var title %>
     </title>
     <link rel="stylesheet" type="text/css" href="/static/application.css">
+    <link rel="icon" href="/static/favicon.png">
   </head>
 
   <body>

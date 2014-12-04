@@ -1,7 +1,7 @@
 (in-package #:chirp)
 
+;; Renders users to JSON
 
-(export 'user)
 (defun json-show-user (user env &optional (stream *standard-output*))
   (json:with-object (stream)
     (json:encode-object-member "username" (username user) stream)

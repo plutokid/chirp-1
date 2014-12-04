@@ -1,5 +1,7 @@
 (in-package #:chirp)
 
+;; Manages api requests to /api/chirps
+
 (defun json-chirps (chirps &optional (stream *standard-output*))
   ;let ((chirps (select 'chirp :flatp t :caching nil)))
   (json:with-array (stream)

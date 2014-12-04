@@ -9,6 +9,7 @@
 	       #:clack-app-route ;#:ningle
 	       #:clack-middleware-csrf
                #:clsql-helper
+	       #:clsql-helper-slot-coercer
 	       #:clsql-postgresql
                #:cl-emb
 	       #:cl-json
@@ -21,6 +22,8 @@
   :components ((:file "package")
 	       (:file "config")
 	       (:file "utils")
+
+	       ;; Things that live in the database
 	       (:module "classes"
 			:components ((:file "base")
 				     (:file "user")
@@ -30,18 +33,22 @@
 				     (:file "mention")
 				     (:file "chirp")
 				     (:file "follow")))
+	       ;; Code that helps render content
 	       (:file "view")
 	       (:module "views"
-			:components ((:file "chirps")
-				     (:file "users")
+			:components ((:file "users")
 				     (:file "sessions")
-				     (:file "tags")
 				     (:module "api"
 					      :components ((:file "chirps")
 							   (:file "users")))))
+
+	       ;; Because writing javascript was too easy
 	       (:module "parenscript"
 			:components ((:file "package")
 				     (:file "birder")
 				     (:file "timeago")))
+
+	       ;; Handling real-time notificatons
+	       (:file "notifications")
 	       (:file "helpers")
 	       (:file "chirp")))

@@ -26,15 +26,15 @@
   (POST "/sessions"     #'create-session)
 
   ;; One page app! (aside from login/out)
-  ;; (POST "/users"        #'create-user)
-  ;; (GET  "/users/new"    #'new-user)
+  (POST "/users"        #'create-user)
+  (GET  "/users/new"    #'new-user)
   ;; (GET  "/users/:user"  #'show-user)
 
   ;; (GET  "/chirps/new"   #'new-chirp)
   ;; (GET  "/chirps/:id"   #'show-chirp)
   ;; (POST "/chirps"       #'create-chirp)
 
-  (GET  "/tags/:tag"    #'show-tag)
+  ;; (GET  "/tags/:tag"    #'show-tag)
 
   ;; API
   (GET  "/api/chirps"   #'json-show-chirps)

@@ -46,7 +46,7 @@
 
 (defun current-user (env)
   (when-let ((session (current-session env)))
-    (user session))))
+    (user session)))
 
 (defun current-user-p (env user)
   (when-let ((current-user (current-user env)))

@@ -40,7 +40,7 @@
 		     (chain $route-provider
 			    (when "/"
 			      (create
-			       :template-uri "/static/landing.html"))
+			       template-url "/static/landing.html"))
 			    (when "/users/:username"
 			      (create
 			       controller "UserController"

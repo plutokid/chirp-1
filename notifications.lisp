@@ -71,8 +71,8 @@
   ;; (when-let* ((env  (clack.handler.hunchensocket::handle-request
   ;; 		     (hunchensocket:client-request client)))
   ;; 	      (user (current-user env)))
-;    (setf (gethash (id user) *routing-table*) client)
-    ))
+;    (setf (gethash (id user) *routing-table*) client))
+    )
 
 (defmethod hunchensocket:client-disconnected ((channel socket-router)
 					      client)

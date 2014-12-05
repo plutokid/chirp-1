@@ -17,16 +17,17 @@
     (gethash id *routing-table* default)))
 
 (defun notify-followers-for-chirp (chirp &optional (author (author chirp)))
-  (if-let ((follower-ids (get-follower-ids author)))
-    ;; (loop
-    ;;    for id in follower-ids
-    ;;    for client = (maybe-get-client id)
-    ;;    ;; If we found a socket, tell it about the chirp!
-    ;;    when client
-    ;;    do (notify-for-chirp chirp client))
+  (declare (ignore author))
+  ;; (if-let ((follower-ids (get-follower-ids author)))
+  ;;   (loop
+  ;;      for id in follower-ids
+  ;;      for client = (maybe-get-client id)
+  ;;      ;; If we found a socket, tell it about the chirp!
+  ;;      when client
+  ;;      do (notify-for-chirp chirp client)))
 
-    (loop for client in (hunchensocket:clients +resource+)
-	 do (notify-for-chirp chirp client))))
+  (loop for client in (hunchensocket:clients +resource+)
+     do (notify-for-chirp chirp client)))
 
 (defun notify-for-chirp (chirp &optional client)
     (when (slot-boundp chirp 'id)
@@ -58,11 +59,12 @@
 
 ;; Just use one resource because I can't come up with a clever way to use more
 ;; FIXME: Channels for things?
-(setf hunchensocket:*websocket-dispatch-table*
-      (list
-       (lambda (req)
-	 (declare (ignore req))
-	 +resource+)))
+(defun start-sockets ()
+  (setf hunchensocket:*websocket-dispatch-table*
+	(list
+	 (lambda (req)
+	   (declare (ignore req))
+	   +resource+))))
 
 (defmethod hunchensocket:client-connected ((channel socket-router)
 					   client)
@@ -83,7 +85,7 @@
     (remhash (id (current-user env)) *routing-table*)))
 
 (defmethod hunchensocket:text-message-received
-    ((channel hunchensocket:websocket-resource)
+    ((channel socket-router)
      (client hunchensocket:websocket-client)
      data)
 

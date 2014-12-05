@@ -71,7 +71,11 @@
 	   :database-type (envy:config :chirp.config :database-type))
 	  #'app-wrap)
 	 :server :hunchensocket
-	 :port port)))
+	 :port port))
+
+  ;; Start sockets happens after making the acceptor because
+  ;; it overrides the websocket dispatcher
+  (start-sockets))
 
 (defun stop ()
   (clack:stop))

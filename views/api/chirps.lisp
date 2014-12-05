@@ -60,7 +60,7 @@
   (let ((chirp-params (params env :request '(:content))))
     (json-response
       (with-output-to-string (s)
-	(if-let ((chirp (make-chirp-for-current-user (print (getf chirp-params :content)) env)))
+	(if-let ((chirp (make-chirp-for-current-user (getf chirp-params :content) env)))
 	  (json:with-object (s)
 	    (json:encode-object-member "result" "success" s)
 	    (json:as-object-member ("chirp" s)

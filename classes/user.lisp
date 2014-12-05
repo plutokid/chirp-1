@@ -32,6 +32,20 @@
 		     :home-key id
 		     :set t)
 	   :accessor chirps)
+   (followers :db-kind :join
+	      :db-info (:join-class follow
+			:home-key id
+			:foreign-key followee-id
+			:target-slot follower
+			:set t)
+	      :reader followers)
+   (followees :db-kind :join
+	      :db-info (:join-class follow
+			:home-key id
+			:foreign-key follower-id
+			:target-slot followee
+			:set t)
+	      :reader followees)
    (sessions :type sessions
 	     :db-kind :join
 	     :db-info (:join-class session
@@ -114,3 +128,8 @@
     (not (string= "f" (car (format-query "SELECT COUNT(follows.id) > 0
 FROM follows
 WHERE follows.follower_id = ~d AND follows.followee_id = ~d" (id follower) (id followee)))))))
+
+(defun get-follower-ids (user)
+  (format-query "SELECT users.id FROM users
+JOIN follows ON follows.follower_id = users.id
+WHERE follows.followee_id = ~d" (id user)))

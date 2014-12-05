@@ -10,7 +10,7 @@
   (html-response
     (with-layout ()
       (render-emb "chirp/form"
-		  (print (list :session (getf env :clack.session)))))))
+		  (list :session (getf env :clack.session))))))
 
 (defun create-chirp (env)
   (let* ((chirp-params (append (params env :chirp '(:content)) `(:user-id ,(id (user (current-session env))))))

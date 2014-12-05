@@ -1,5 +1,7 @@
 (in-package #:chirp)
 
+;; Can be tested with
+;; http://www.websocket.org/echo.html
 
 (defclass socket-router (hunchensocket:websocket-resource)
   ())
@@ -8,17 +10,35 @@
 
 (defvar *routing-table* (make-hash-table))
 
-(defun notifiy-for-chirp (chirp)
-    (unless (slot-boundp chirp 'id)
-    (when-let* ((user (find-user (user-id chirp)))
-		(client (gethash (user-id user) *routing-table*))
-		(message (with-output-to-string (s)
-			   (json:with-array (s)
-			     (json:encode-array-member "chirp" s)
-			     (json:as-array-member (s)
-			       (json-chirp chirp s))))))
+(defun maybe-get-client (user &optional (default nil))
+  (let ((id (etypecase user
+	       (user   (user-id user))
+	       (number user))))
+    (gethash id *routing-table* default)))
 
-        (hunchensocket:send-text-message client message))))
+(defun notify-followers-for-chirp (chirp &optional (author (author chirp)))
+  (if-let ((follower-ids (get-follower-ids author)))
+    ;; (loop
+    ;;    for id in follower-ids
+    ;;    for client = (maybe-get-client id)
+    ;;    ;; If we found a socket, tell it about the chirp!
+    ;;    when client
+    ;;    do (notify-for-chirp chirp client))
+
+    (loop for client in (hunchensocket:clients +resource+)
+	 do (notify-for-chirp chirp client))))
+
+(defun notify-for-chirp (chirp &optional client)
+    (when (slot-boundp chirp 'id)
+      (when-let* ((user (find-user (user-id chirp)))
+		  (client (or client (maybe-get-client user)))
+		  (message (with-output-to-string (s)
+			     (json:with-array (s)
+			       (json:encode-array-member "chirp" s)
+			       (json:as-array-member (s)
+				 (json-chirp chirp s))))))
+
+	(hunchensocket:send-text-message client (print message)))))
 ;; FIXME: Need something like this, but initialize-instance :after never works
 ;; (defmethod initialize-instance :after ((chirp chirp) &rest initargs)
 ;;   "Creates a notification about a chirp after it's created and pipes it into
@@ -47,11 +67,12 @@
 (defmethod hunchensocket:client-connected ((channel socket-router)
 					   client)
   ;; Add client to the routing table!
-  (when-let* ((env  (clack.handler.hunchensocket::handle-request
-		     (hunchensocket:client-request client)))
-	      (user (current-user env)))
-    (log4cl:log-info "~a ~a" user client)
-    (setf (gethash (id user) *routing-table*) client)))
+  ;; (log4cl:log-error "Connection ~a ~a" channel client)
+  ;; (when-let* ((env  (clack.handler.hunchensocket::handle-request
+  ;; 		     (hunchensocket:client-request client)))
+  ;; 	      (user (current-user env)))
+;    (setf (gethash (id user) *routing-table*) client)
+    ))
 
 (defmethod hunchensocket:client-disconnected ((channel socket-router)
 					      client)
@@ -61,17 +82,12 @@
 	      (user (current-user env)))
     (remhash (id (current-user env)) *routing-table*)))
 
-;; (defmethod hunchensocket:text-message-received
-;;     ((channel hunchensocket:websocket-resource)
-;;      (client hunchensocket:websocket-client)
-;;      data)
+(defmethod hunchensocket:text-message-received
+    ((channel hunchensocket:websocket-resource)
+     (client hunchensocket:websocket-client)
+     data)
 
-;;   (log4cl:log-info "Got a message! ~a" data)
-;;   (print data)
-;;   ;; data is JSON here
-;;   (case (getf data :message)
-;;     ("user_chirps" )
-;;     ("single_chirp")))
+  (log4cl:log-info "Got a message! ~a" data))
 
 (defmethod hunchensocket:text-message-received :around
     ((channel socket-router)

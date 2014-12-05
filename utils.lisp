@@ -58,4 +58,5 @@
   (ironclad:byte-array-to-hex-string (ironclad:make-random-salt)))
 
 (defun format-query (query &rest args)
+  "Works like #'format but tastes like SQL"
   (clsql:query (apply #'format nil query args) :flatp t :field-names nil))

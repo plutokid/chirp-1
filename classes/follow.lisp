@@ -14,7 +14,8 @@
 	       :initform (clsql:get-time)
 	       :initarg :updated-at)
    (follower-id :type integer
-		:initarg :follower-id)
+		:initarg :follower-id
+		:accessor follower-id)
    (follower :type user
 	     :db-kind :join
 	     :db-info (:join-class user
@@ -23,7 +24,8 @@
 		       :set nil)
 	     :accessor follower)
    (followee-id :type integer
-		:initarg :followee-id)
+		:initarg :followee-id
+		:accessor followee-id)
    (followee :type user
 	     :db-kind :join
 	     :db-info (:join-class user

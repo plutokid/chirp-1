@@ -65,18 +65,30 @@
 				 (then (lambda (response)
 					 (setf (@ $scope chirps) (@ response chirps)
 					       (@ $scope user) (@ response user)))))
+
+			  ;; We need to disconnect the websocket or we get
+			  ;; "did you live in an internet barn?" errors about leaving
+			  ;; it open when we left the page
 			  (setf (@ window onbeforeunload)
 				(lambda ()
 				  (chain -web-socket (close))))
 
-;
-			  ;; (chain -web-socket
-			  ;; 	 (onmessage (lambda (event) (chain console (log event)))))
-
+			  (chain -web-socket
+				 (onopen (lambda ()
+					   (chain console (log "Phoned home!")))))
+			  (chain -web-socket
+				 (onmessage
+				  (lambda (event)
+				    (let ((data (chain angular (from-json (@ event data)))))
+				      (when (= (aref data 0) "chirp")
+					(chain console (log "Got a socket message: " data))
+					(chain $scope chirps (push (aref data 1))))))))
 			  ;; Tell our websocket who we're looking at
 			  (when (chain -web-socket (ready-state))
 			    (chain -web-socket
-				   (send (chain angular (to-json (list "user" (@ $route-params username))))))))))
+				   (send (chain angular (to-json (list "user" (@ $route-params username))))))
+
+			    ))))
 
 	   ;; (controller "TagController"
 	   ;; 	       (list "$scope" "$routeParams" "Chirps"

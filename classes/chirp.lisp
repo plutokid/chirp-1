@@ -40,8 +40,8 @@
 	 :reader tags
 	 :db-kind :join
 	 :db-info (:join-class tagging
-			       :home-key id
-			       :foreign-key chirp-id
+		   :home-key id
+		   :foreign-key chirp-id
 		   :target-slot tag
 		   :set t))
    (content :type string
@@ -68,6 +68,7 @@
     (let ((chirp (make-instance 'chirp :content content :user-id (id user))))
       (update-records-from-instance chirp)
       (extract-references chirp)
+      (notify-followers-for-chirp chirp user)
       chirp)))
 
 (defun extract-references (chirp)

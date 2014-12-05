@@ -21,7 +21,7 @@
   <div class="chirp" ng-repeat="chirp in chirps | orderBy:'created_at':true">
     <div class="chirp-header">
       <img ng-src="{{ chirp.user_avatar }}" class="chirp-img">
-      <a href="{{ '#' + chirp.user_url }}" class="chirp-username">{{ '@' + chirp.username }}</a>
+      <a href="{{ chirp.user_url }}" class="chirp-username">{{ '@' + chirp.username }}</a>
       <span class="chirp-timeago">{{ chirp.created_at | timeago }}</span>
     </div>
 
